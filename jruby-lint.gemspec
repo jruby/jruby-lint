@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "jruby-lint/version"
+require "jruby/lint/version"
 
 Gem::Specification.new do |s|
   s.name        = "jruby-lint"
-  s.version     = Jruby::Lint::VERSION
+  s.version     = JRuby::Lint::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Nick Sieger"]
   s.email       = ["nick@nicksieger.com"]
@@ -26,4 +26,9 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec", ">= 2.5"
+  s.add_development_dependency "rspec-given"
 end
+
+# Local Variables:
+# mode: ruby
+# End:
