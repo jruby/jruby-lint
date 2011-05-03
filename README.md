@@ -26,9 +26,13 @@ implement:
   - Compile a gem compatibility list from the JRuby wiki, with an
     offline cache released with each gem.
 - Report on threading and concurrency issues
-- Report usage of #fork and #exec
-- Warnings vs. errors
+- Report usage of `#fork` and `#exec`
+- Warnings vs. errors -- lint levels
 - Warn about `system("ruby ...")` and the like
+- Warn about `ObjectSpace.each_object(...)`
+- Warn about `ObjectSpace.id2ref` etc
+- Warn about `Thread.critical`, `Thread#kill` and the like
+- Try to detect IO/File resource usage without blocks
 
 ### Further Down the Road
 
