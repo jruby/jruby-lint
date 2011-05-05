@@ -13,4 +13,5 @@ end
 RSpec.configure do |config|
   config.include JRuby::Lint::Specs
   config.include Aruba::Api
+  config.before { @aruba_timeout_seconds = 5 }
 end
