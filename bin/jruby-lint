@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'jruby/lint/cli'
+
+JRuby::Lint::CLI.new(ARGV).run
