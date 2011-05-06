@@ -11,5 +11,12 @@ describe JRuby::Lint::CLI do
       Then { output_from(command).should =~ /help.*This message/ }
       Then { @last_exit_status.should == 0 }
     end
+
+    context "with the version option" do
+      Given(:args) { "--version" }
+      When { run_simple(command) }
+      Then { output_from(command).should =~ /version #{JRuby::Lint::VERSION}/ }
+      Then { @last_exit_status.should == 0 }
+    end
   end
 end

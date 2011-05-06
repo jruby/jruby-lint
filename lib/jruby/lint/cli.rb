@@ -12,6 +12,12 @@ module JRuby
           opts.separator ""
           opts.separator "Options:"
 
+          opts.on_tail("-v", "--version", "Print version and exit") do
+            require 'jruby/lint/version'
+            puts "jruby-lint version #{VERSION}"
+            exit
+          end
+
           opts.on_tail("-h", "--help", "This message") do
             puts opts
             exit
