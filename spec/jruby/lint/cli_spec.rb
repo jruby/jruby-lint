@@ -8,15 +8,19 @@ describe JRuby::Lint::CLI do
     context "with the help option" do
       Given(:args) { "--help" }
       When { run_simple(command) }
-      Then { output_from(command).should =~ /help.*This message/ }
-      Then { @last_exit_status.should == 0 }
+      Then do
+        output_from(command).should =~ /help.*This message/
+        @last_exit_status.should == 0
+      end
     end
 
     context "with the version option" do
       Given(:args) { "--version" }
       When { run_simple(command) }
-      Then { output_from(command).should =~ /version #{JRuby::Lint::VERSION}/ }
-      Then { @last_exit_status.should == 0 }
+      Then do
+        output_from(command).should =~ /version #{JRuby::Lint::VERSION}/
+        @last_exit_status.should == 0
+      end
     end
   end
 end
