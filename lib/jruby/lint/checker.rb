@@ -2,10 +2,10 @@
 # checker.
 module JRuby::Lint::Checker
   def self.included(cls)
-    checkers << cls
+    loaded_checkers << cls
   end
 
-  def self.checkers
+  def self.loaded_checkers
     @checkers ||= []
   end
 end

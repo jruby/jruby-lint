@@ -2,9 +2,9 @@ class JRuby::Lint::Collector
   attr_accessor :checkers, :reporters, :findings
 
   def initialize
-    @checkers = []
+    @checkers  = JRuby::Lint::Checker.loaded_checkers.map(&:new)
     @reporters = []
-    @findings = []
+    @findings  = []
   end
 
   def run

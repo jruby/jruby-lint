@@ -13,5 +13,13 @@ end
 RSpec.configure do |config|
   config.include JRuby::Lint::Specs
   config.include Aruba::Api
-  config.before { @aruba_timeout_seconds = 5 }
+
+  config.before do
+    @aruba_timeout_seconds = 5
+    @existing_checkers = JRuby::Lint::Checker.loaded_checkers.dup
+  end
+
+  config.after do
+    JRuby::Lint::Checker.loaded_checkers.replace(@existing_checkers)
+  end
 end

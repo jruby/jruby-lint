@@ -2,6 +2,13 @@ require File.expand_path('../../../spec_helper', __FILE__)
 
 describe JRuby::Lint::Collector do
   Given(:collector) { JRuby::Lint::Collector.new }
+  Given(:checker_class) { Class.new { include JRuby::Lint::Checker } }
+
+  it "loads detected checkers" do
+    checker_class
+    collector.checkers.detect {|c| checker_class === c }.should be_true
+  end
+
   Given(:checker) { mock("checker").tap {|checker| collector.checkers = [checker] } }
 
   it "invokes all checkers" do
@@ -20,4 +27,5 @@ describe JRuby::Lint::Collector do
 
     collector.run
   end
+
 end

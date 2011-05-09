@@ -5,7 +5,7 @@ describe JRuby::Lint::Checker do
     subject { Class.new { include JRuby::Lint::Checker } }
 
     it "finds all loaded checkers" do
-      JRuby::Lint::Checker.checkers.should include(subject)
+      JRuby::Lint::Checker.loaded_checkers.should include(subject)
     end
   end
 end
