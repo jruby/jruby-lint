@@ -11,7 +11,7 @@ difficult to run your code on JRuby.
 JRuby-Lint requires JRuby to run. So, [install JRuby first][install]
 if you already haven't.
 
-Then simply run `jruby-lint` in your project to receive a report of
+Then simply run `jrlint` in your project to receive a report of
 places in your project where you should investigate further.
 
 ## TODO
