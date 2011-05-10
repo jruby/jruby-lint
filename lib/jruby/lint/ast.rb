@@ -1,7 +1,18 @@
 module JRuby::Lint
   module AST
+    module Predicates
+      METHOD_NODES = %w(CALLNODE FCALLNODE VCALLNODE)
+
+      def method_calls_named(name, opts = {})
+        only_type = opts[:type] && "#{opts[:type].to_s.upcase}NODE"
+        node_types = METHOD_NODES.reject {|t| only_type && t != only_type }
+        select {|n| node_types.include? n.node_type.to_s }
+      end
+    end
+
     class Visitor
       include Enumerable
+      include Predicates
       include org.jruby.ast.visitor.NodeVisitor
       attr_reader :ast
 
