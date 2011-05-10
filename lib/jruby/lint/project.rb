@@ -4,7 +4,7 @@ module JRuby::Lint
 
     def initialize
       @collectors = load_collectors
-      @reporters = []
+      @reporters = [Reporters::Text.new(STDOUT)]
     end
 
     def run
