@@ -4,5 +4,5 @@ module JRuby
 end
 
 require 'jruby/lint/collector'
-require 'jruby/lint/checker'
+require 'jruby/lint/checkers'
 require 'jruby/lint/version'
