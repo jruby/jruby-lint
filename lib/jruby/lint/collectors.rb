@@ -20,23 +20,12 @@ module JRuby::Lint
     end
   end
 
-  module FileCollector
-    attr_reader :file
-
-    def initialize(filename)
-      @file = filename
-    end
-
-    def contents
-      File.read(@file)
-    end
-  end
-
   module ASTCollector
     attr_reader :contents
 
-    def initialize(script)
+    def initialize(script = nil)
       @contents = script
+      super()
     end
 
     def file
@@ -45,6 +34,19 @@ module JRuby::Lint
 
     def ast
       @ast ||= JRuby.parse(contents, file, true)
+    end
+  end
+
+  module FileCollector
+    attr_reader :file
+
+    def initialize(filename = nil)
+      @file = filename
+      super()
+    end
+
+    def contents
+      File.read(@file)
     end
   end
 

@@ -8,13 +8,13 @@ module JRuby
       def process_options(args)
         require 'optparse'
         OptionParser.new do |opts|
-          opts.banner = "Usage: jruby-lint [options] [files]"
+          opts.banner = "Usage: jrlint [options] [files]"
           opts.separator ""
           opts.separator "Options:"
 
           opts.on_tail("-v", "--version", "Print version and exit") do
             require 'jruby/lint/version'
-            puts "jruby-lint version #{VERSION}"
+            puts "JRuby-Lint version #{VERSION}"
             exit
           end
 
@@ -26,7 +26,17 @@ module JRuby
       end
 
       def run
-        exit
+        require 'jruby/lint'
+        project = JRuby::Lint::Project.new
+        puts "JRuby-Lint version #{JRuby::Lint::VERSION}"
+        project.run
+        puts "Processed #{project.files.size} file#{project.files.size == 1 ? '' : 's'}"
+        if project.findings.empty?
+          puts "OK"
+          exit
+        else
+          exit 1
+        end
       end
     end
   end

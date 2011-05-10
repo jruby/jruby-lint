@@ -17,6 +17,7 @@ RSpec.configure do |config|
   config.before do
     @aruba_timeout_seconds = 5
     @existing_checkers = JRuby::Lint::Checker.loaded_checkers.dup
+    in_current_dir { Dir['**/*'].each {|f| File.unlink(f) if File.file?(f) } }
   end
 
   config.after do

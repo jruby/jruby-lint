@@ -22,5 +22,18 @@ describe JRuby::Lint::CLI do
         @last_exit_status.should == 0
       end
     end
+
+    context "with no arguments" do
+      Given { write_file("Rakefile", "") }
+      Given(:args) { "" }
+      When { run_simple(command) }
+      Then do
+        output = output_from(command)
+        output.should =~ /JRuby-Lint version #{JRuby::Lint::VERSION}/
+        output.should =~ /Processed 1 file/
+        output.should =~ /OK/
+        @last_exit_status.should == 0
+      end
+    end
   end
 end

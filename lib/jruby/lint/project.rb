@@ -1,6 +1,7 @@
+require 'set'
 module JRuby::Lint
   class Project
-    attr_reader :collectors, :reporters, :findings
+    attr_reader :collectors, :reporters, :findings, :files
 
     def initialize
       @collectors = load_collectors
@@ -16,11 +17,15 @@ module JRuby::Lint
 
     private
     def load_collectors
+      @files = Set.new
       [].tap do |collectors|
-        Dir['**/*'].each do |f|
+        Dir['./**/*'].each do |f|
           next unless File.file?(f)
           Collector.all.each do |c|
-            collectors << c.new(f) if c.detect?(f)
+            if c.detect?(f)
+              collectors << c.new(f)
+              @files << f
+            end
           end
         end
       end

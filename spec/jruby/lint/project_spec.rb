@@ -1,7 +1,6 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe JRuby::Lint::Project do
-  before { in_current_dir { Dir['**/*'].each {|f| File.unlink(f) if File.file?(f) } } }
   Given(:project) { in_current_dir { JRuby::Lint::Project.new.tap {|p| p.reporters.clear } } }
 
   context "collects Ruby scripts" do
