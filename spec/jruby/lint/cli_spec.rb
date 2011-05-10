@@ -24,15 +24,23 @@ describe JRuby::Lint::CLI do
     end
 
     context "with no arguments" do
-      Given { write_file("Rakefile", "") }
       Given(:args) { "" }
-      When { run_simple(command) }
-      Then do
-        output = output_from(command)
-        output.should =~ /JRuby-Lint version #{JRuby::Lint::VERSION}/
-        output.should =~ /Processed 1 file/
-        output.should =~ /OK/
-        @last_exit_status.should == 0
+
+      context "and some files to process" do
+        Given { write_file("Rakefile", "") }
+        When { run_simple(command) }
+        Then do
+          output = output_from(command)
+          output.should =~ /JRuby-Lint version #{JRuby::Lint::VERSION}/
+          output.should =~ /Processed 1 file/
+          output.should =~ /OK/
+          @last_exit_status.should == 0
+        end
+      end
+
+      context "and no files to process" do
+        When { run_simple(command) }
+        Then { output_from(command).should =~ /Processed 0 files/ }
       end
     end
   end
