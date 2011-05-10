@@ -33,15 +33,46 @@ describe JRuby::Lint::Project do
   end
 
   context "aggregates findings from all collectors" do
-    Given(:collector1) { double "collector 1" }
-    Given(:collector2) { double "collector 2" }
-    Given { collector1.should_receive(:run).ordered }
-    Given { collector2.should_receive(:run).ordered }
-    Given { collector1.should_receive(:findings).ordered.and_return [Object.new] }
-    Given { collector2.should_receive(:findings).ordered.and_return [Object.new] }
-    Given { project.collectors.replace([collector1, collector2]) }
+    Given(:collector1) do
+      double("collector 1").tap do |c1|
+        c1.should_receive(:run)
+        c1.should_receive(:findings).and_return [double "finding 1"]
+      end
+    end
+    Given(:collector2) do
+      double("collector 2").tap do |c2|
+        c2.should_receive(:run)
+        c2.should_receive(:findings).and_return [double "finding 2"]
+      end
+    end
 
+    When { project.collectors.replace([collector1, collector2]) }
     When { findings = project.run }
+
     Then { project.findings.size.should == 2 }
+  end
+
+  context "reports findings" do
+    Given(:finding) { double "finding" }
+
+    Given(:collector) do
+      double("collector").tap do |c|
+        c.should_receive(:run)
+        c.should_receive(:findings).and_return [finding]
+      end
+    end
+
+    Given(:reporter) do
+      double("reporter").tap do |r|
+        r.should_receive(:report).with([finding])
+      end
+    end
+
+    When do
+      project.collectors.replace [collector]
+      project.reporters.replace [reporter]
+    end
+
+    Then { project.run }
   end
 end

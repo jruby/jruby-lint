@@ -1,15 +1,17 @@
 module JRuby::Lint
   class Project
-    attr_reader :collectors, :findings
+    attr_reader :collectors, :reporters, :findings
 
     def initialize
       @collectors = load_collectors
+      @reporters = []
     end
 
     def run
-      collectors.each {|c| c.run }
       @findings = []
+      collectors.each {|c| c.run }
       collectors.each {|c| @findings += c.findings }
+      reporters.each {|r| r.report(@findings)}
     end
 
     private
