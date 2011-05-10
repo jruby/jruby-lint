@@ -22,9 +22,24 @@ describe JRuby::Lint::FileChecker do
     end
   end
 
-  Given(:checker) { HelloFileChecker.new('Hellofile') }
   Given(:findings) { [] }
   Given(:collector) { double('collector', :findings => findings) }
+  Given(:checker) { HelloFileChecker.new('Hellofile') }
+
   When { in_current_dir { checker.check(collector) } }
   Then { findings.should include("File Hellofile matches") }
+end
+
+describe JRuby::Lint::ASTChecker do
+  class ScriptChecker
+    include JRuby::Lint::ASTChecker
+  end
+
+  context "loads an AST" do
+    Given(:checker) { ScriptChecker.new('puts "hello"') }
+
+    When { @ast = checker.ast }
+
+    Then { @ast.inspect.should =~ /"hello"/m }
+  end
 end
