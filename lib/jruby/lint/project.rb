@@ -1,11 +1,14 @@
 require 'set'
 module JRuby::Lint
   class Project
-    attr_reader :collectors, :reporters, :findings, :files
+    DEFAULT_TAGS = %w(error warning info)
+
+    attr_reader :collectors, :reporters, :findings, :files, :tags
 
     def initialize
+      @tags = DEFAULT_TAGS
       @collectors = load_collectors
-      @reporters = [Reporters::Text.new(STDOUT)]
+      @reporters = [Reporters::Text.new(self, STDOUT)]
     end
 
     def run

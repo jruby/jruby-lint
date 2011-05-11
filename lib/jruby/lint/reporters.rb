@@ -1,12 +1,14 @@
 module JRuby::Lint
   module Reporters
     class Text
-      def initialize(output)
-        @output = output
+      def initialize(project, output)
+        @tags, @output = project.tags, output
       end
 
       def report(findings)
-        findings.each {|f| @output.puts f.to_s }
+        findings.each do| f|
+          @output.puts f.to_s unless (@tags & f.tags).empty?
+        end
       end
     end
   end
