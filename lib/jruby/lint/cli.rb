@@ -45,7 +45,7 @@ module JRuby
         puts "JRuby-Lint version #{JRuby::Lint::VERSION}"
         time = Benchmark.realtime { project.run }
         term = @options.eval ? 'expression' : 'file'
-        puts "Processed #{project.files.size} #{term}#{project.files.size == 1 ? '' : 's'} in #{time} seconds"
+        puts "Processed #{project.files.size} #{term}#{project.files.size == 1 ? '' : 's'} in #{'%0.02f' % time} seconds"
 
         if project.findings.empty?
           puts "OK"
