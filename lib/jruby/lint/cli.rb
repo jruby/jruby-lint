@@ -34,13 +34,14 @@ module JRuby
             exit
           end
         end.parse!(args)
+
+        @options.files = args.empty? ? nil : args
       end
 
       def run
         require 'jruby/lint'
         require 'benchmark'
-        project = JRuby::Lint::Project.new
-        project.configure(@options)
+        project = JRuby::Lint::Project.new(@options)
 
         puts "JRuby-Lint version #{JRuby::Lint::VERSION}"
         time = Benchmark.realtime { project.run }

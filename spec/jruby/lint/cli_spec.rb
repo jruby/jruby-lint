@@ -32,6 +32,16 @@ describe JRuby::Lint::CLI do
       end
     end
 
+    context "with a file argument" do
+      Given(:args) { "sample.rb" }
+      Given { write_file("sample.rb", "puts 'hello'"); write_file("example.rb", "puts 'hello'") }
+      When { run_simple(command) }
+      Then do
+        output_from(command).should =~ /Processed 1 file/
+        @last_exit_status.should == 0
+      end
+    end
+
     context "with no arguments" do
       Given(:args) { "" }
 

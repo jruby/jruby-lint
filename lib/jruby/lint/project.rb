@@ -1,22 +1,25 @@
 require 'set'
+require 'ostruct'
+
 module JRuby::Lint
   class Project
     DEFAULT_TAGS = %w(error warning info)
 
     attr_reader :collectors, :reporters, :findings, :files, :tags
 
-    def initialize
+    def initialize(options = OpenStruct.new)
       @tags = DEFAULT_TAGS
-      @collectors = load_collectors
-      @reporters  = load_reporters
-    end
+      @collectors = []
+      @files = Set.new
 
-    def configure(options)
       if options.eval
-        @collectors = []
         options.eval.each {|e| @collectors << JRuby::Lint::Collectors::Ruby.new('-e', e) }
-        @files = @collectors
+        @files += @collectors
       end
+
+      @sources = options.files || (options.eval ? [] : Dir['./**/*'])
+      load_collectors
+      load_reporters
     end
 
     def run
@@ -30,22 +33,19 @@ module JRuby::Lint
 
     private
     def load_collectors
-      @files = Set.new
-      [].tap do |collectors|
-        Dir['./**/*'].each do |f|
-          next unless File.file?(f)
-          Collector.all.each do |c|
-            if c.detect?(f)
-              collectors << c.new(f)
-              @files << f
-            end
+      @sources.each do |f|
+        next unless File.file?(f)
+        Collector.all.each do |c|
+          if c.detect?(f)
+            @collectors << c.new(f)
+            @files << f
           end
         end
       end
     end
 
     def load_reporters
-      [(STDOUT.tty? ? Reporters::ANSIColor : Reporters::Text).new(self, STDOUT)]
+      @reporters = [(STDOUT.tty? ? Reporters::ANSIColor : Reporters::Text).new(self, STDOUT)]
     end
   end
 end
