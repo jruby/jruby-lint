@@ -8,7 +8,12 @@ module JRuby::Lint
     end
 
     def run
-      checkers.each {|c| c.check(self) }
+      begin
+        checkers.each {|c| c.check(self) }
+      rescue SyntaxError => e
+        file, line, message = e.message.split(/:\s*/, 3)
+        findings << Finding.new(message, [:syntax, :error], file, line)
+      end
     end
 
     def self.inherited(base)

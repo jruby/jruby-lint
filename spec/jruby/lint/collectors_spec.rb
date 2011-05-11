@@ -15,6 +15,16 @@ describe JRuby::Lint::Collector do
     checker.should_receive(:check).with(collector)
     collector.run
   end
+
+  it "reports syntax errors as findings" do
+    checker.should_receive(:check).and_raise(SyntaxError.new("-:3: random syntax error"))
+    collector.run
+    collector.findings.size.should == 1
+    finding = collector.findings.first
+    finding.file.should == '-'
+    finding.line.should == '3'
+    finding.message.should == 'random syntax error'
+  end
 end
 
 describe JRuby::Lint::FileCollector do
