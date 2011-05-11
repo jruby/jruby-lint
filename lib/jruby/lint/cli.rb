@@ -14,7 +14,11 @@ module JRuby
           opts.separator ""
           opts.separator "Options:"
 
-          opts.on("-e", "--eval SCRIPT", "Lint an inline script") do |v|
+          opts.on('-C', '--chdir DIRECTORY', "Change working directory") do |v|
+            Dir.chdir(v)
+          end
+
+          opts.on("-e", '--eval SCRIPT', "Lint an inline script") do |v|
             @options.eval ||= []
             @options.eval << v
           end
