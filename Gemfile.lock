@@ -9,6 +9,7 @@ PATH
   remote: .
   specs:
     jruby-lint (0.0.1)
+      term-ansicolor
 
 GEM
   remote: http://rubygems.org/
