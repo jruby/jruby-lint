@@ -20,7 +20,7 @@ describe JRuby::Lint::Finding do
 
     When { @finding = JRuby::Lint::Finding.new(message, tags, source_position) }
     Then { @finding.file.should == file }
-    Then { @finding.line.should == line }
+    Then { @finding.line.should == line + 1 }
   end
 
   context "converts all tags to strings" do
