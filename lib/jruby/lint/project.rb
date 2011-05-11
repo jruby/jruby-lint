@@ -21,9 +21,11 @@ module JRuby::Lint
 
     def run
       @findings = []
-      collectors.each {|c| c.run }
-      collectors.each {|c| @findings += c.findings }
-      reporters.each {|r| r.report(@findings)}
+      collectors.each do |c|
+        c.run
+        reporters.each {|r| r.report(c.findings)}
+        @findings += c.findings
+      end
     end
 
     private

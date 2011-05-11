@@ -38,12 +38,15 @@ module JRuby
 
       def run
         require 'jruby/lint'
+        require 'benchmark'
         project = JRuby::Lint::Project.new
         project.configure(@options)
+
         puts "JRuby-Lint version #{JRuby::Lint::VERSION}"
-        project.run
+        time = Benchmark.realtime { project.run }
         term = @options.eval ? 'expression' : 'file'
-        puts "Processed #{project.files.size} #{term}#{project.files.size == 1 ? '' : 's'}"
+        puts "Processed #{project.files.size} #{term}#{project.files.size == 1 ? '' : 's'} in #{time} seconds"
+
         if project.findings.empty?
           puts "OK"
           exit
