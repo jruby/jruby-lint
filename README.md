@@ -16,8 +16,7 @@ places in your project where you should investigate further.
 
 ## TODO
 
-At this point, everything, but here is a list of things we'd like to
-implement:
+Here is a list of checks and options we'd like to implement:
 
 - Options to save report off to a file.
   - Text, HTML formats
@@ -26,13 +25,13 @@ implement:
   - Compile a gem compatibility list from the JRuby wiki, with an
     offline cache released with each gem.
 - Report on threading and concurrency issues
-- Report usage of `#fork` and `#exec`
-- Warnings vs. errors -- lint levels
 - Warn about `system("ruby ...")` and the like
 - Warn about `ObjectSpace.each_object(...)`
 - Warn about `ObjectSpace.id2ref` etc
 - Warn about `Thread.critical`, `Thread#kill` and the like
 - Try to detect IO/File resource usage without blocks
+- Detect ERB files and skip them, or...
+- Detect ERB files and pre-process them to Ruby source with Erubis
 
 ### Further Down the Road
 
