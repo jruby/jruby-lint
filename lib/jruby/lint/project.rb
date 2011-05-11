@@ -8,7 +8,7 @@ module JRuby::Lint
     def initialize
       @tags = DEFAULT_TAGS
       @collectors = load_collectors
-      @reporters = [(STDOUT.tty? ? Reporters::ANSIColor : Reporters::Text).new(self, STDOUT)]
+      @reporters  = load_reporters
     end
 
     def run
@@ -32,6 +32,10 @@ module JRuby::Lint
           end
         end
       end
+    end
+
+    def load_reporters
+      [(STDOUT.tty? ? Reporters::ANSIColor : Reporters::Text).new(self, STDOUT)]
     end
   end
 end
