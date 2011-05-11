@@ -28,6 +28,7 @@ module JRuby::Lint
       end
 
       alias each_node each
+      alias traverse each
 
       def visit(node)
         @block.call(node) if @block

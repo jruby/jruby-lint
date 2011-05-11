@@ -10,4 +10,9 @@ module JRuby::Lint
       @checkers ||= []
     end
   end
+
+  module Checkers
+  end
 end
+
+require 'jruby/lint/checkers/fork_exec'
