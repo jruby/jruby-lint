@@ -46,7 +46,7 @@ module JRuby::Lint
     end
 
     def contents
-      File.read(@file)
+      @contents || File.read(@file)
     end
   end
 

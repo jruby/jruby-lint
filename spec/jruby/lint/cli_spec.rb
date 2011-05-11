@@ -23,6 +23,15 @@ describe JRuby::Lint::CLI do
       end
     end
 
+    context "with a dash-e option" do
+      Given(:args) { "-e true"}
+      When { run_simple(command) }
+      Then do
+        output_from(command).should =~ /Processed 1 expression/
+        @last_exit_status.should == 0
+      end
+    end
+
     context "with no arguments" do
       Given(:args) { "" }
 

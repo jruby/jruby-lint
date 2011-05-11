@@ -11,6 +11,14 @@ module JRuby::Lint
       @reporters  = load_reporters
     end
 
+    def configure(options)
+      if options.eval
+        @collectors = []
+        options.eval.each {|e| @collectors << JRuby::Lint::Collectors::Ruby.new('-e', e) }
+        @files = @collectors
+      end
+    end
+
     def run
       @findings = []
       collectors.each {|c| c.run }

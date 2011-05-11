@@ -33,7 +33,7 @@ module JRuby::Lint
       def visit(node)
         @block.call(node) if @block
         node.child_nodes.each do |cn|
-          cn.accept(self)
+          cn.accept(self) rescue nil
         end
       end
 
