@@ -22,4 +22,10 @@ describe JRuby::Lint::Finding do
     Then { @finding.file.should == file }
     Then { @finding.line.should == line }
   end
+
+  context "converts all tags to strings" do
+    Given(:tags) { [1, :two, 3.0] }
+    When { @finding = JRuby::Lint::Finding.new(message, tags, file, line) }
+    Then { @finding.tags.should == ["1", "two", "3.0"] }
+  end
 end
