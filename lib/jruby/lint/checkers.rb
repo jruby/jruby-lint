@@ -16,3 +16,4 @@ module JRuby::Lint
 end
 
 require 'jruby/lint/checkers/fork_exec'
+require 'jruby/lint/checkers/gem'

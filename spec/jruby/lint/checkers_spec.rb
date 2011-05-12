@@ -13,7 +13,10 @@ end
 describe JRuby::Lint::Checkers do
   Given(:findings) { [] }
   Given(:ast) { JRuby.parse script }
-  Given(:collector) { double("collector", :ast => ast, :findings => findings) }
+  Given(:gems) { { "rdiscount" => "may not work" } }
+  Given(:gems_info) { double "gem info", :gems => gems }
+  Given(:project) { double "project", :gems_info => gems_info }
+  Given(:collector) { double "collector", :ast => ast, :findings => findings, :project => project }
 
   context "Fork/exec checker" do
     Given(:checker) { JRuby::Lint::Checkers::ForkExec.new }
@@ -46,6 +49,22 @@ describe JRuby::Lint::Checkers do
       Given(:script) { "Kernel::fork; Kernel::exec('cmd')" }
       When { checker.check(collector) }
       Then { findings.size.should == 2 }
+    end
+  end
+
+  context "Gem checker" do
+    Given(:checker) { JRuby::Lint::Checkers::Gem.new }
+
+    context "creates a finding for a gem mentioned in the gems info" do
+      Given(:script) { "gem 'rdiscount'" }
+      When { checker.check(collector) }
+      Then { findings.size.should == 1 }
+    end
+
+    context "does not create a finding for a gem not mentioned in the gems info" do
+      Given(:script) { "gem 'json_pure'" }
+      When { checker.check(collector) }
+      Then { findings.size.should == 0 }
     end
   end
 end
