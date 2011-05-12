@@ -8,6 +8,7 @@ module JRuby::Lint::Specs
   def project_dir
     PROJECT_DIR
   end
+  ENV['JRUBY_LINT_CACHE'] = "#{PROJECT_DIR}/spec/fixtures"
 end
 
 RSpec.configure do |config|

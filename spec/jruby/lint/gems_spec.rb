@@ -1,7 +1,7 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe JRuby::Lint::Gems do
-  Given(:cache_dir) { File.expand_path('../../../fixtures', __FILE__) }
+  Given(:cache_dir) { ENV['JRUBY_LINT_CACHE'] }
   Given(:cache) { JRuby::Lint::Gems::Cache.new(cache_dir) }
 
   context "cache" do

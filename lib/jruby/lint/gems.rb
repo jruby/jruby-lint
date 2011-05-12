@@ -1,11 +1,13 @@
 require 'net/https'
 require 'nokogiri'
+require 'tempfile'
 
 module JRuby::Lint
   module Gems
     class Cache
       def initialize(cache_dir = nil)
-        @cache_dir = cache_dir || (defined?(Gem.user_dir) && File.join(Gem.user_dir, 'lint'))
+        @cache_dir = cache_dir || ENV['JRUBY_LINT_CACHE'] ||
+          (defined?(Gem.user_dir) && File.join(Gem.user_dir, 'lint')) || Dir::tmpdir
       end
 
       def fetch(name)
