@@ -91,11 +91,16 @@ module JRuby::Lint
       end
 
       def load
-        @gems = {}
-        @sources.each do |s|
-          s.load
-          @gems.update(s.gems)
+        @gems = {}.tap do |gems|
+          @sources.each do |s|
+            s.load
+            gems.update(s.gems)
+          end
         end
+      end
+
+      def gems
+        @gems ||= load
       end
     end
   end
