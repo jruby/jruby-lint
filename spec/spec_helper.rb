@@ -8,11 +8,23 @@ module JRuby::Lint::Specs
   def project_dir
     PROJECT_DIR
   end
+
+  module NetAccess
+    def requires_net_access
+      require 'net/http'
+      begin
+        Net::HTTP.start('jruby.org', 80) {|x| x.head('/')}
+        yield
+      rescue
+      end
+    end
+  end
 end
 
 RSpec.configure do |config|
   config.include JRuby::Lint::Specs
   config.include Aruba::Api
+  config.extend JRuby::Lint::Specs::NetAccess
 
   config.before do
     @aruba_timeout_seconds = 20
