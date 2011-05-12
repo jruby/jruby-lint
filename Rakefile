@@ -3,6 +3,7 @@ Bundler::GemHelper.install_tasks
 
 require 'bundler/setup'
 require 'rspec/core/rake_task'
+ENV['RUN_ALL_SPECS'] = 'true'   # Always run all specs from Rake
 RSpec::Core::RakeTask.new
 
 task :default => [:update_fixtures, :spec]

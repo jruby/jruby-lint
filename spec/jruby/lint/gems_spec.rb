@@ -4,11 +4,9 @@ describe JRuby::Lint::Gems do
   context "cache" do
     Given(:cache) { JRuby::Lint::Gems::Cache.new(current_dir) }
 
-    requires_net_access do
-      context "fetch with net access" do
-        When { cache.fetch('C-Extension-Alternatives') }
-        Then { check_file_presence('C-Extension-Alternatives.html', true) }
-      end
+    context "fetch with net access", :requires_net => true do
+      When { cache.fetch('C-Extension-Alternatives') }
+      Then { check_file_presence('C-Extension-Alternatives.html', true) }
     end
 
     context "no net access" do
