@@ -1,4 +1,5 @@
 require 'net/https'
+require 'nokogiri'
 
 module JRuby::Lint
   module Gems
@@ -55,8 +56,22 @@ module JRuby::Lint
     end
 
     class CExtensions
+      attr_reader :gems
+
       def initialize(cache)
         @cache = cache
+      end
+
+      def load
+        @gems = {}
+        content = @cache.fetch('C-Extension-Alternatives')
+        doc = Nokogiri::HTML(content)
+        doc.css('#wiki-body ul li').each do |li|
+          key, message = li.text.split(/[ -]+/, 2)
+          @gems[key.downcase] = message
+        end
+      rescue => e
+        @error = "Unable to load C Extension alternatives list: #{e.message}"
       end
     end
   end

@@ -29,10 +29,10 @@ describe JRuby::Lint::Gems do
     end
   end
 
-  # context "c extensions list" do
-  #   Given(:cache) { JRuby::Lint::Gems::Cache.new(File.expand_path('../../../fixtures', __FILE__))}
-  #   Given(:list) { JRuby::Lint::Gems::CExtensions.new(cache) }
-  #   When { list.fetch }
-  #   Then { list.gems.keys.should include("rdiscount", "rmagick")}
-  # end
+  context "c extensions list" do
+    Given(:cache) { JRuby::Lint::Gems::Cache.new(File.expand_path('../../../fixtures', __FILE__))}
+    Given(:list) { JRuby::Lint::Gems::CExtensions.new(cache) }
+    When { list.load }
+    Then { list.gems.keys.should include("rdiscount", "rmagick")}
+  end
 end
