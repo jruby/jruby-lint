@@ -4,12 +4,22 @@ describe JRuby::Lint::Gems do
   context "cache" do
     Given(:cache) { JRuby::Lint::Gems::Cache.new(current_dir) }
 
-    context "fetch with net access", :requires_net => true do
-      When { cache.fetch('C-Extension-Alternatives') }
-      Then { check_file_presence('C-Extension-Alternatives.html', true) }
+    context "with net access", :requires_net => true do
+      context "fetch" do
+        When { cache.fetch('C-Extension-Alternatives') }
+        Then { check_file_presence('C-Extension-Alternatives.html', true) }
+      end
+
+      context "refreshes a file that's too old" do
+        Given { write_file('C-Extension-Alternatives.html', 'alternatives') }
+        Given(:yesterday) { Time.now - 25 * 60 * 60 }
+        Given { File.utime yesterday, yesterday, File.join(current_dir, 'C-Extension-Alternatives.html')}
+        When { cache.fetch('C-Extension-Alternatives') }
+        Then { File.mtime(File.join(current_dir, 'C-Extension-Alternatives.html')).should > yesterday }
+      end
     end
 
-    context "no net access" do
+    context "with no net access" do
       Given { Net::HTTP.should_not_receive(:start) }
 
       context "store assumes .html extension by default" do

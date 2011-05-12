@@ -10,7 +10,7 @@ module JRuby::Lint
 
       def fetch(name)
         filename = filename_for(name)
-        if File.file?(filename)
+        if File.file?(filename) && !stale?(filename)
           File.read(filename)
         else
           read_from_wiki(name, filename)
@@ -24,6 +24,10 @@ module JRuby::Lint
       def filename_for(name)
         name = File.basename(name)
         File.join(@cache_dir, File.extname(name).empty? ? "#{name}.html" : name)
+      end
+
+      def stale?(filename)
+        File.mtime(filename) < Time.now - 24 * 60 * 60
       end
 
       def read_from_wiki(name, filename)
