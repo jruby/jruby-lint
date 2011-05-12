@@ -41,7 +41,7 @@ describe JRuby::Lint::FileCollector do
 
   Given(:findings) { [] }
   Given(:collector) { double('collector', :findings => findings) }
-  Given(:checker) { HelloFileCollector.new('Hellofile') }
+  Given(:checker) { HelloFileCollector.new(double('project'), 'Hellofile') }
 
   When { in_current_dir { checker.check(collector) } }
   Then { findings.should include("File Hellofile matches") }

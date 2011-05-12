@@ -1,6 +1,6 @@
 module JRuby::Lint
   class Collector
-    attr_accessor :checkers, :findings
+    attr_accessor :checkers, :findings, :project
 
     def initialize
       @checkers  = Checker.loaded_checkers.map(&:new)
@@ -45,7 +45,8 @@ module JRuby::Lint
   module FileCollector
     attr_reader :file
 
-    def initialize(filename = nil)
+    def initialize(project, filename = nil)
+      @project = project
       @file = filename
       super()
     end

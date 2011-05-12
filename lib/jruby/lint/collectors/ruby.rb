@@ -4,8 +4,8 @@ module JRuby::Lint
       include ASTCollector
       include FileCollector
 
-      def initialize(file, contents = nil)
-        super(file)
+      def initialize(project, file, contents = nil)
+        super(project, file)
         @contents = contents
       end
 
