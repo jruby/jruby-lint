@@ -11,8 +11,8 @@ end
 
 require 'jruby/lint/ast'
 require 'jruby/lint/project'
+require 'jruby/lint/finding'
 require 'jruby/lint/collectors'
 require 'jruby/lint/checkers'
 require 'jruby/lint/reporters'
-require 'jruby/lint/findings'
 require 'jruby/lint/version'
