@@ -1,8 +1,11 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe JRuby::Lint::Gems do
+  Given(:cache_dir) { File.expand_path('../../../fixtures', __FILE__) }
+  Given(:cache) { JRuby::Lint::Gems::Cache.new(cache_dir) }
+
   context "cache" do
-    Given(:cache) { JRuby::Lint::Gems::Cache.new(current_dir) }
+    Given(:cache_dir) { current_dir }
 
     context "with net access", :requires_net => true do
       context "fetch" do
@@ -40,9 +43,14 @@ describe JRuby::Lint::Gems do
   end
 
   context "c extensions list" do
-    Given(:cache) { JRuby::Lint::Gems::Cache.new(File.expand_path('../../../fixtures', __FILE__))}
     Given(:list) { JRuby::Lint::Gems::CExtensions.new(cache) }
     When { list.load }
     Then { list.gems.keys.should include("rdiscount", "rmagick")}
+  end
+
+  context "info" do
+    Given(:info) { JRuby::Lint::Gems::Info.new(cache) }
+    When { info.load }
+    Then { info.gems.keys.should include("rdiscount", "rmagick")}
   end
 end

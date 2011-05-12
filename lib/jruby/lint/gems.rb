@@ -78,5 +78,23 @@ module JRuby::Lint
         @error = "Unable to load C Extension alternatives list: #{e.message}"
       end
     end
+
+    class Info
+      SOURCES = [CExtensions]
+
+      attr_reader :gems
+
+      def initialize(cache)
+        @sources = SOURCES.map {|s| s.new(cache) }
+      end
+
+      def load
+        @gems = {}
+        @sources.each do |s|
+          s.load
+          @gems.update(s.gems)
+        end
+      end
+    end
   end
 end
