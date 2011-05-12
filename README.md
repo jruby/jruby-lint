@@ -22,8 +22,6 @@ Here is a list of checks and options we'd like to implement:
   - Text, HTML formats
 - Report on gem compatibility from gems found in `*.gemspec` and
   `Gemfile`.
-  - Compile a gem compatibility list from the JRuby wiki, with an
-    offline cache released with each gem.
 - Report on threading and concurrency issues
 - Warn about `system("ruby ...")` and the like
 - Warn about `ObjectSpace.each_object(...)`
