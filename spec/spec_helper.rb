@@ -21,6 +21,7 @@ RSpec.configure do |config|
     @aruba_timeout_seconds = 20
     @existing_checkers = JRuby::Lint::Checker.loaded_checkers.dup
     in_current_dir { Dir['**/*'].each {|f| File.unlink(f) if File.file?(f) } }
+    JRuby::Lint::Checkers::CheckGemNode.instance_eval { @added_wiki_link = nil }
   end
 
   config.after do

@@ -13,7 +13,7 @@ end
 describe JRuby::Lint::Checkers do
   Given(:findings) { [] }
   Given(:ast) { JRuby.parse script }
-  Given(:gems) { { "rdiscount" => "may not work" } }
+  Given(:gems) { { "rdiscount" => "may not work", "bson_ext" => "not needed" } }
   Given(:gems_info) { double "gem info", :gems => gems }
   Given(:project) { double "project", :gems_info => gems_info }
   Given(:collector) { double "collector", :ast => ast, :findings => findings, :project => project }
@@ -58,7 +58,13 @@ describe JRuby::Lint::Checkers do
     context "creates a finding for a gem mentioned in the gems info" do
       Given(:script) { "gem 'rdiscount'" }
       When { checker.check(collector) }
-      Then { findings.size.should == 1 }
+      Then { findings.size.should == 2 }
+    end
+
+    context "creates one finding to mention the wiki for gem compatibility" do
+      Given(:script) { "gem 'rdiscount'; gem 'bson_ext'" }
+      When { checker.check(collector) }
+      Then { findings.size.should == 3 }
     end
 
     context "does not create a finding for a gem not mentioned in the gems info" do
@@ -74,8 +80,9 @@ describe JRuby::Lint::Checkers do
     Given(:script) { "Gem::Specification.new do |s|" +
       "\ns.name = 'hello'\ns.add_dependency 'rdiscount'\n" +
       "s.add_development_dependency 'ruby-debug19'\nend\n" }
+
     When { checker.check(collector) }
-    Then { findings.size.should == 1 }
-    Then { findings.first.message.should =~ /rdiscount/ }
+    Then { findings.size.should == 2 }
+    Then { findings.detect{|f| f.message =~ /rdiscount/ }.should be_true }
   end
 end
