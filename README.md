@@ -20,8 +20,6 @@ Here is a list of checks and options we'd like to implement:
 
 - Options to save report off to a file.
   - Text, HTML formats
-- Report on gem compatibility from gems found in `*.gemspec` and
-  `Gemfile`.
 - Report on threading and concurrency issues
 - Warn about `system("ruby ...")` and the like
 - Warn about `ObjectSpace.each_object(...)`
@@ -30,6 +28,8 @@ Here is a list of checks and options we'd like to implement:
 - Try to detect IO/File resource usage without blocks
 - Detect ERB files and skip them, or...
 - Detect ERB files and pre-process them to Ruby source with Erubis
+- Detect Bundler gems that have a `platforms` qualifier and ignore
+  "platforms :ruby"
 
 ### Further Down the Road
 
