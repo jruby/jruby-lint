@@ -14,8 +14,8 @@ module JRuby::Lint
         @gems ||= collector.project.gems_info.gems
         gem_name = gem_name(call_node)
         if instructions = @gems[gem_name]
-          msg = "Found gem '#{gem_name} which is reported to have some issues:\n#{instructions}"
-          collector.findings << Finding.new(msg, [:gems, :warning], call_node)
+          msg = "Found gem '#{gem_name}' which is reported to have some issues:\n#{instructions}"
+          collector.findings << Finding.new(msg, [:gems, :warning], call_node.position)
         end
       end
     end
