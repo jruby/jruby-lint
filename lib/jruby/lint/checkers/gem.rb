@@ -1,19 +1,6 @@
 module JRuby::Lint
   module Checkers
-    class Gem
-      include Checker
-
-      def check(collector)
-        gems = nil
-        visitor = ::JRuby::Lint::AST::Visitor.new(collector.ast)
-        visitor.method_calls_named('gem', :type => :fcall).each do |node|
-          gems ||= collector.project.gems_info.gems
-          if msg = gems[gem_name(node)]
-            collector.findings << Finding.new(msg, [:gems, :warning], node)
-          end
-        end
-      end
-
+    module CheckGemNode
       def gem_name(node)
         first_arg = node.args_node.child_nodes[0]
         if first_arg.node_type.to_s == "STRNODE"
@@ -21,6 +8,27 @@ module JRuby::Lint
         end
       rescue
         nil
+      end
+
+      def check_gem(collector, call_node)
+        @gems ||= collector.project.gems_info.gems
+        gem_name = gem_name(call_node)
+        if instructions = @gems[gem_name]
+          msg = "Found gem '#{gem_name} which is reported to have some issues:\n#{instructions}"
+          collector.findings << Finding.new(msg, [:gems, :warning], call_node)
+        end
+      end
+    end
+
+    class Gem
+      include Checker
+      include CheckGemNode
+
+      def check(collector)
+        visitor = ::JRuby::Lint::AST::Visitor.new(collector.ast)
+        visitor.method_calls_named('gem', :type => :fcall).each do |node|
+          check_gem(collector, node)
+        end
       end
     end
   end

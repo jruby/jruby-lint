@@ -17,3 +17,4 @@ end
 
 require 'jruby/lint/checkers/fork_exec'
 require 'jruby/lint/checkers/gem'
+require 'jruby/lint/checkers/gemspec'

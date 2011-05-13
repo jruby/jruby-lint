@@ -67,4 +67,15 @@ describe JRuby::Lint::Checkers do
       Then { findings.size.should == 0 }
     end
   end
+
+  context "Gemspec checker" do
+    Given(:checker) { JRuby::Lint::Checkers::Gemspec.new }
+
+    Given(:script) { "Gem::Specification.new do |s|" +
+      "\ns.name = 'hello'\ns.add_dependency 'rdiscount'\n" +
+      "s.add_development_dependency 'ruby-debug19'\nend\n" }
+    When { checker.check(collector) }
+    Then { findings.size.should == 1 }
+    Then { findings.first.message.should =~ /rdiscount/ }
+  end
 end
