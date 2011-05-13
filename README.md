@@ -30,6 +30,8 @@ Here is a list of checks and options we'd like to implement:
 - Detect ERB files and pre-process them to Ruby source with Erubis
 - Detect Bundler gems that have a `platforms` qualifier and ignore
   "platforms :ruby"
+- 1.8/1.9 parser support/configuration without having to run JRuby
+  itself in the right mode
 
 ### Further Down the Road
 
