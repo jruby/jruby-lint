@@ -72,6 +72,12 @@ describe JRuby::Lint::Checkers do
       When { checker.check(collector) }
       Then { findings.size.should == 0 }
     end
+
+    context "only checks calls to #gem" do
+      Given(:script) { "require 'rdiscount'" }
+      When { checker.check(collector) }
+      Then { findings.size.should == 0 }
+    end
   end
 
   context "Gemspec checker" do
