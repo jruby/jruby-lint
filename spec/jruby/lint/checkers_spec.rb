@@ -109,4 +109,31 @@ describe JRuby::Lint::Checkers do
     When { checker.check(collector) }
     Then { findings.size.should == 2 }
   end
+
+  context "class variable assignment in a class body is OK" do
+    Given(:checker) { JRuby::Lint::Checkers::ClassVariables.new }
+
+    Given(:script) { "class Foo; @@a = 1; end"}
+
+    When { checker.check(collector) }
+    Then { findings.size.should == 0 }
+  end
+
+  context "class variable assignment in a method body is bad" do
+    Given(:checker) { JRuby::Lint::Checkers::ClassVariables.new }
+
+    Given(:script) { "class Foo; def set_a; @@a = 1; end; end"}
+
+    When { checker.check(collector) }
+    Then { findings.size.should == 1 }
+  end
+
+  context "class variable ||= assignment in a method body is bad" do
+    Given(:checker) { JRuby::Lint::Checkers::ClassVariables.new }
+
+    Given(:script) { "class Foo; def set_a; @@a ||= 1; end; end"}
+
+    When { checker.check(collector) }
+    Then { findings.size.should == 1 }
+  end
 end
