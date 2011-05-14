@@ -5,10 +5,7 @@ module JRuby::Lint
 
       def check(collector)
         visitor = ::JRuby::Lint::AST::Visitor.new(collector.ast)
-        visitor.select do |node|
-          ::JRuby::Lint::AST::Visitor::METHOD_NODES.include?(node.node_type.to_s) &&
-            node.name =~ /^critical=?$/
-        end.each do |node|
+        visitor.method_calls_named("critical", "critical=").each do |node|
           begin
             if node.receiver_node.node_type.to_s == "CONSTNODE" && node.receiver_node.name == "Thread"
               add_finding(collector, node)

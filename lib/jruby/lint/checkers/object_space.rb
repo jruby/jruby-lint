@@ -7,7 +7,7 @@ module JRuby::Lint
         visitor = ::JRuby::Lint::AST::Visitor.new(collector.ast)
         visitor.method_calls_named("each_object", "_id2ref").each do |node|
           begin
-            next unless node.receiver_node.name == "ObjectSpace"
+            next unless node.receiver_node.node_type.to_s == "CONSTNODE" && node.receiver_node.name == "ObjectSpace"
             next if node.args_node && node.args_node.size == 1 &&
               %w(Class Module).include?(node.args_node[0].name)
             add_finding(collector, node)
