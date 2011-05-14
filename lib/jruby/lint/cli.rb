@@ -52,6 +52,7 @@ module JRuby
           puts "OK"
           exit
         else
+          puts "Found #{project.findings.size} items"
           exit 1
         end
       end
