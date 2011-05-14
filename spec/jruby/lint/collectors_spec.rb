@@ -25,37 +25,10 @@ describe JRuby::Lint::Collector do
     finding.line.should == '3'
     finding.message.should == 'random syntax error'
   end
-end
-
-describe JRuby::Lint::FileCollector do
-  Given { write_file('Hellofile', 'hi') }
-
-  class HelloFileCollector
-    include JRuby::Lint::FileCollector
-    def check(collector)
-      if contents =~ /hi/
-        collector.findings << "File #{file} matches"
-      end
-    end
-  end
-
-  Given(:findings) { [] }
-  Given(:collector) { double('collector', :findings => findings) }
-  Given(:checker) { HelloFileCollector.new(double('project'), 'Hellofile') }
-
-  When { in_current_dir { checker.check(collector) } }
-  Then { findings.should include("File Hellofile matches") }
-end
-
-describe JRuby::Lint::ASTCollector do
-  class ScriptCollector
-    include JRuby::Lint::ASTCollector
-  end
 
   context "loads an AST" do
-    Given(:checker) { ScriptCollector.new('puts "hello"') }
-
-    When { @ast = checker.ast }
+    Given { collector.contents = 'puts "hello"' }
+    When { @ast = collector.ast }
     Then { @ast.inspect.should =~ /"hello"/m }
   end
 end

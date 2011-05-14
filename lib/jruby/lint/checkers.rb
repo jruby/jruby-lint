@@ -9,6 +9,8 @@ module JRuby::Lint
     def self.loaded_checkers
       @checkers ||= []
     end
+
+    attr_accessor :collector
   end
 
   module Checkers

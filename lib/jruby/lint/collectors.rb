@@ -1,10 +1,12 @@
 module JRuby::Lint
   class Collector
-    attr_accessor :checkers, :findings, :project
+    attr_accessor :checkers, :findings, :project, :contents, :file
 
-    def initialize
+    def initialize(project = nil, file = nil)
       @checkers  = Checker.loaded_checkers.map(&:new)
+      @checkers.each {|c| c.collector = self }
       @findings  = []
+      @project, @file = project, file || '<inline-script>'
     end
 
     def run
@@ -16,43 +18,20 @@ module JRuby::Lint
       end
     end
 
+    def ast
+      @ast ||= JRuby.parse(contents, file, true)
+    end
+
+    def contents
+      @contents || File.read(@file)
+    end
+
     def self.inherited(base)
       self.all << base
     end
 
     def self.all
       @collectors ||= []
-    end
-  end
-
-  module ASTCollector
-    attr_reader :contents
-
-    def initialize(script = nil)
-      @contents = script
-      super()
-    end
-
-    def file
-      '<inline-script>'
-    end
-
-    def ast
-      @ast ||= JRuby.parse(contents, file, true)
-    end
-  end
-
-  module FileCollector
-    attr_reader :file
-
-    def initialize(project, filename = nil)
-      @project = project
-      @file = filename
-      super()
-    end
-
-    def contents
-      @contents || File.read(@file)
     end
   end
 
