@@ -36,10 +36,9 @@ module JRuby::Lint
     class Gem
       include Checker
       include CheckGemNode
-      include JRuby::Lint::AST::MethodCalls
 
-      def visitMethodCallNode(node)
-        check_gem(collector, node) if node.name == "gem" && node.node_type.to_s == "FCALLNODE"
+      def visitFCallNode(node)
+        check_gem(collector, node) if node.name == "gem"
       end
     end
   end
