@@ -37,6 +37,9 @@ Here is a list of checks and options we'd like to implement:
 - Report on threading and concurrency issues
 - Warn about `system("ruby ...")` and the like
 - Try to detect IO/File resource usage without blocks
+- Check .gemspec files for extensions and extconf.rb for
+  #create_makefile and warn about compiliing C extensions
+- Check whether Rails production.rb contains `config.threadsafe!`
 - Detect ERB files and skip them, or...
 - Detect ERB files and pre-process them to Ruby source with Erubis
 - Detect Bundler gems that have a `platforms` qualifier and ignore
