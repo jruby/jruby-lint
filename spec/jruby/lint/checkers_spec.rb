@@ -91,4 +91,22 @@ describe JRuby::Lint::Checkers do
     Then { findings.size.should == 2 }
     Then { findings.detect{|f| f.message =~ /rdiscount/ }.should be_true }
   end
+
+  context "Thread.critical checker" do
+    Given(:checker) { JRuby::Lint::Checkers::ThreadCritical.new }
+
+    Given(:script) { "begin \n Thread.critical \n end"}
+
+    When { checker.check(collector) }
+    Then { findings.size.should == 1 }
+  end
+
+  context "Thread.critical= checker" do
+    Given(:checker) { JRuby::Lint::Checkers::ThreadCritical.new }
+
+    Given(:script) { "begin \n Thread.critical = true \n ensure Thread.critical = false \n end"}
+
+    When { checker.check(collector) }
+    Then { findings.size.should == 2 }
+  end
 end

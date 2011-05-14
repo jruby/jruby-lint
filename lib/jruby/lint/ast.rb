@@ -1,7 +1,7 @@
 module JRuby::Lint
   module AST
     module Predicates
-      METHOD_NODES = %w(CALLNODE FCALLNODE VCALLNODE)
+      METHOD_NODES = %w(CALLNODE FCALLNODE VCALLNODE ATTRASSIGNNODE)
 
       def method_calls_named(name, opts = {})
         only_type = opts[:type] && "#{opts[:type].to_s.upcase}NODE"
