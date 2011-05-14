@@ -3,10 +3,11 @@ module JRuby::Lint
     module Predicates
       METHOD_NODES = %w(CALLNODE FCALLNODE VCALLNODE ATTRASSIGNNODE)
 
-      def method_calls_named(name, opts = {})
+      def method_calls_named(*names)
+        opts = names.last.kind_of?(Hash) ? names.pop : {}
         only_type = opts[:type] && "#{opts[:type].to_s.upcase}NODE"
         node_types = METHOD_NODES.reject {|t| only_type && t != only_type }
-        select {|n| node_types.include?(n.node_type.to_s) && n.name == name }
+        select {|n| node_types.include?(n.node_type.to_s) && names.include?(n.name) }
       end
     end
 

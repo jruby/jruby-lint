@@ -136,4 +136,31 @@ describe JRuby::Lint::Checkers do
     When { checker.check(collector) }
     Then { findings.size.should == 1 }
   end
+
+  context "ObjectSpace._id2ref usage" do
+    Given(:checker) { JRuby::Lint::Checkers::ObjectSpace.new }
+
+    Given(:script) { "ObjectSpace._id2ref(obj)"}
+
+    When { checker.check(collector) }
+    Then { findings.size.should == 1 }
+  end
+
+  context "ObjectSpace.each_object usage" do
+    Given(:checker) { JRuby::Lint::Checkers::ObjectSpace.new }
+
+    Given(:script) { "ObjectSpace.each_object { }"}
+
+    When { checker.check(collector) }
+    Then { findings.size.should == 1 }
+  end
+
+  context "ObjectSpace.each_object(Class) usage is ok" do
+    Given(:checker) { JRuby::Lint::Checkers::ObjectSpace.new }
+
+    Given(:script) { "ObjectSpace.each_object(Class) { }"}
+
+    When { checker.check(collector) }
+    Then { findings.size.should == 0 }
+  end
 end

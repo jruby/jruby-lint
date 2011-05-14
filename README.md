@@ -22,9 +22,6 @@ Here is a list of checks and options we'd like to implement:
   - Text, HTML formats
 - Report on threading and concurrency issues
 - Warn about `system("ruby ...")` and the like
-- Warn about `ObjectSpace.each_object(...)`
-- Warn about `ObjectSpace.id2ref` etc
-- Warn about `Thread.critical`, `Thread#kill` and the like
 - Try to detect IO/File resource usage without blocks
 - Detect ERB files and skip them, or...
 - Detect ERB files and pre-process them to Ruby source with Erubis
@@ -35,6 +32,7 @@ Here is a list of checks and options we'd like to implement:
 
 ### Further Down the Road
 
+- Arbitrary method/AST search functionality 
 - Code rewriter: option to change code automatically where it's
   feasible
 - Revive or build an isit.jruby.org site for tracking
