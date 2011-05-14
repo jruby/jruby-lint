@@ -2,10 +2,12 @@ module JRuby::Lint
   module Checkers
     class ObjectSpace
       include Checker
+      include JRuby::Lint::AST::MethodCalls
 
-      def check(collector)
-        visitor = ::JRuby::Lint::AST::Visitor.new(collector.ast)
-        visitor.method_calls_named("each_object", "_id2ref").each do |node|
+      METHODS = %w(each_object _id2ref)
+
+      def visitMethodCallNode(node)
+        if METHODS.include?(node.name)
           begin
             next unless node.receiver_node.node_type.to_s == "CONSTNODE" && node.receiver_node.name == "ObjectSpace"
             next if node.args_node && node.args_node.size == 1 &&

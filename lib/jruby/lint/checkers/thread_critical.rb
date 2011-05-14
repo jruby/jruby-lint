@@ -2,10 +2,12 @@ module JRuby::Lint
   module Checkers
     class ThreadCritical
       include Checker
+      include JRuby::Lint::AST::MethodCalls
 
-      def check(collector)
-        visitor = ::JRuby::Lint::AST::Visitor.new(collector.ast)
-        visitor.method_calls_named("critical", "critical=").each do |node|
+      METHODS = %w(critical critical=)
+
+      def visitMethodCallNode(node)
+        if METHODS.include?(node.name)
           begin
             if node.receiver_node.node_type.to_s == "CONSTNODE" && node.receiver_node.name == "Thread"
               add_finding(collector, node)

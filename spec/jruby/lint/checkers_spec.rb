@@ -11,12 +11,15 @@ describe JRuby::Lint::Checker do
 end
 
 describe JRuby::Lint::Checkers do
-  Given(:findings) { [] }
-  Given(:ast) { JRuby.parse script }
   Given(:gems) { { "rdiscount" => "may not work", "bson_ext" => "not needed" } }
-  Given(:libraries) { double "libraries", :gems => gems }
-  Given(:project) { double "project", :libraries => libraries }
-  Given(:collector) { double "collector", :ast => ast, :findings => findings, :project => project }
+  Given(:project) { double("project").tap {|p| p.stub_chain("libraries.gems") { gems } } }
+  Given(:collector) do
+    JRuby::Lint::Collector.new(project).tap do |c|
+      c.contents = script
+      c.checkers = [checker]
+      checker.collector = c
+    end
+  end
 
   context "Fork/exec checker" do
     Given(:checker) { JRuby::Lint::Checkers::ForkExec.new }
@@ -24,31 +27,31 @@ describe JRuby::Lint::Checkers do
     context "detects fcall-style" do
       # FCallNoArgBlockNode |fork|
       Given(:script) { "fork { }; exec('cmd')" }
-      When { checker.check(collector) }
-      Then { findings.size.should == 2 }
+      When { collector.run }
+      Then { collector.findings.size.should == 2 }
     end
 
     context "detects vcall-style" do
       # VCallNode |fork|
       Given(:script) { "fork" }
-      When { checker.check(collector) }
-      Then { findings.size.should == 1 }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
     end
 
     context "does not detect call-style" do
       # CallNoArgNode |fork|
       #   VCallNode |fork|
       Given(:script) { "fork.fork" }
-      When { checker.check(collector) }
-      Then { findings.size.should == 0 }
+      When { collector.run }
+      Then { collector.findings.size.should == 0 }
     end
 
     context "detects Kernel::fork style" do
       # CallNoArgNode |fork|
       #   ConstNode |Kernel|
       Given(:script) { "Kernel::fork; Kernel::exec('cmd')" }
-      When { checker.check(collector) }
-      Then { findings.size.should == 2 }
+      When { collector.run }
+      Then { collector.findings.size.should == 2 }
     end
   end
 
@@ -57,26 +60,26 @@ describe JRuby::Lint::Checkers do
 
     context "creates a finding for a gem mentioned in the libraries" do
       Given(:script) { "gem 'rdiscount'" }
-      When { checker.check(collector) }
-      Then { findings.size.should == 2 }
+      When { collector.run }
+      Then { collector.findings.size.should == 2 }
     end
 
     context "creates one finding to mention the wiki for gem compatibility" do
       Given(:script) { "gem 'rdiscount'; gem 'bson_ext'" }
-      When { checker.check(collector) }
-      Then { findings.size.should == 3 }
+      When { collector.run }
+      Then { collector.findings.size.should == 3 }
     end
 
     context "does not create a finding for a gem not mentioned in the gems info" do
       Given(:script) { "gem 'json_pure'" }
-      When { checker.check(collector) }
-      Then { findings.size.should == 0 }
+      When { collector.run }
+      Then { collector.findings.size.should == 0 }
     end
 
     context "only checks calls to #gem" do
       Given(:script) { "require 'rdiscount'" }
-      When { checker.check(collector) }
-      Then { findings.size.should == 0 }
+      When { collector.run }
+      Then { collector.findings.size.should == 0 }
     end
   end
 
@@ -87,80 +90,68 @@ describe JRuby::Lint::Checkers do
       "\ns.name = 'hello'\ns.add_dependency 'rdiscount'\n" +
       "s.add_development_dependency 'ruby-debug19'\nend\n" }
 
-    When { checker.check(collector) }
-    Then { findings.size.should == 2 }
-    Then { findings.detect{|f| f.message =~ /rdiscount/ }.should be_true }
+    When { collector.run }
+    Then { collector.findings.size.should == 2 }
+    Then { collector.findings.detect{|f| f.message =~ /rdiscount/ }.should be_true }
   end
 
   context "Thread.critical checker" do
     Given(:checker) { JRuby::Lint::Checkers::ThreadCritical.new }
 
-    Given(:script) { "begin \n Thread.critical \n end"}
+    context "read" do
+      Given(:script) { "begin \n Thread.critical \n end"}
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
 
-    When { checker.check(collector) }
-    Then { findings.size.should == 1 }
+    context "assign" do
+      Given(:script) { "begin \n Thread.critical = true \n ensure Thread.critical = false \n end"}
+      When { collector.run }
+      Then { collector.findings.size.should == 2 }
+    end
   end
 
-  context "Thread.critical= checker" do
-    Given(:checker) { JRuby::Lint::Checkers::ThreadCritical.new }
-
-    Given(:script) { "begin \n Thread.critical = true \n ensure Thread.critical = false \n end"}
-
-    When { checker.check(collector) }
-    Then { findings.size.should == 2 }
-  end
-
-  context "class variable assignment in a class body is OK" do
+  context "class variable assignment" do
     Given(:checker) { JRuby::Lint::Checkers::ClassVariables.new }
 
-    Given(:script) { "class Foo; @@a = 1; end"}
+    context "is OK in a class body" do
+      Given(:script) { "class Foo; @@a = 1; end"}
+      When { collector.run }
+      Then { collector.findings.size.should == 0 }
+    end
 
-    When { checker.check(collector) }
-    Then { findings.size.should == 0 }
+    context "is bad in a method body" do
+      Given(:script) { "class Foo; def set_a; @@a = 1; end; end"}
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+
+    context "using ||= in a method body is bad" do
+      Given(:script) { "class Foo; def set_a; @@a ||= 1; end; end"}
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
   end
 
-  context "class variable assignment in a method body is bad" do
-    Given(:checker) { JRuby::Lint::Checkers::ClassVariables.new }
-
-    Given(:script) { "class Foo; def set_a; @@a = 1; end; end"}
-
-    When { checker.check(collector) }
-    Then { findings.size.should == 1 }
-  end
-
-  context "class variable ||= assignment in a method body is bad" do
-    Given(:checker) { JRuby::Lint::Checkers::ClassVariables.new }
-
-    Given(:script) { "class Foo; def set_a; @@a ||= 1; end; end"}
-
-    When { checker.check(collector) }
-    Then { findings.size.should == 1 }
-  end
-
-  context "ObjectSpace._id2ref usage" do
+  context "ObjectSpace" do
     Given(:checker) { JRuby::Lint::Checkers::ObjectSpace.new }
 
-    Given(:script) { "ObjectSpace._id2ref(obj)"}
+    context "_id2ref usage" do
+      Given(:script) { "ObjectSpace._id2ref(obj)"}
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
 
-    When { checker.check(collector) }
-    Then { findings.size.should == 1 }
-  end
+    context "each_object usage" do
+      Given(:script) { "ObjectSpace.each_object { }"}
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
 
-  context "ObjectSpace.each_object usage" do
-    Given(:checker) { JRuby::Lint::Checkers::ObjectSpace.new }
-
-    Given(:script) { "ObjectSpace.each_object { }"}
-
-    When { checker.check(collector) }
-    Then { findings.size.should == 1 }
-  end
-
-  context "ObjectSpace.each_object(Class) usage is ok" do
-    Given(:checker) { JRuby::Lint::Checkers::ObjectSpace.new }
-
-    Given(:script) { "ObjectSpace.each_object(Class) { }"}
-
-    When { checker.check(collector) }
-    Then { findings.size.should == 0 }
+    context "each_object(Class) usage is ok" do
+      Given(:script) { "ObjectSpace.each_object(Class) { }"}
+      When { collector.run }
+      Then { collector.findings.size.should == 0 }
+    end
   end
 end

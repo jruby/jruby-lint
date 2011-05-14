@@ -3,7 +3,8 @@ module JRuby::Lint
     module CheckGemNode
       def self.add_wiki_link_finding(collector)
         unless @added_wiki_link
-          collector.findings << Finding.new("For more on gem compatibility see http://wiki.jruby.org/C-Extension-Alternatives", [:gems, :info]).tap do |f|
+          collector.findings << Finding.new("For more on gem compatibility see http://wiki.jruby.org/C-Extension-Alternatives",
+                                            [:gems, :info]).tap do |f|
             def f.to_s
               message
             end
@@ -35,12 +36,10 @@ module JRuby::Lint
     class Gem
       include Checker
       include CheckGemNode
+      include JRuby::Lint::AST::MethodCalls
 
-      def check(collector)
-        visitor = ::JRuby::Lint::AST::Visitor.new(collector.ast)
-        visitor.method_calls_named('gem', :type => :fcall).each do |node|
-          check_gem(collector, node)
-        end
+      def visitMethodCallNode(node)
+        check_gem(collector, node) if node.name == "gem" && node.node_type.to_s == "FCALLNODE"
       end
     end
   end

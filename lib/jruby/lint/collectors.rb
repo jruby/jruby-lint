@@ -3,15 +3,45 @@ module JRuby::Lint
     attr_accessor :checkers, :findings, :project, :contents, :file
 
     def initialize(project = nil, file = nil)
-      @checkers  = Checker.loaded_checkers.map(&:new)
+      @checkers = Checker.loaded_checkers.map(&:new)
       @checkers.each {|c| c.collector = self }
-      @findings  = []
+      @findings = []
       @project, @file = project, file || '<inline-script>'
+    end
+
+    class CheckersVisitor < AST::Visitor
+      attr_reader :checkers
+
+      def initialize(ast, checkers)
+        super(ast)
+        @checkers = checkers
+      end
+
+      def visit(method, node)
+        after_hooks = []
+        checkers.each do |ch|
+          begin
+            if ch.respond_to?(method)
+              res = ch.send(method, node)
+              after_hooks << res if res.respond_to?(:call)
+            end
+          rescue => e
+            ch.collector.findings << Finding.new("Exception while traversing: #{e.message}",
+                                                 [:internal, :debug], node.position)
+          end
+        end
+        super
+      ensure
+        begin
+          after_hooks.each {|h| h.call }
+        rescue
+        end
+      end
     end
 
     def run
       begin
-        checkers.each {|c| c.check(self) }
+        CheckersVisitor.new(ast, checkers).traverse
       rescue SyntaxError => e
         file, line, message = e.message.split(/:\s*/, 3)
         findings << Finding.new(message, [:syntax, :error], file, line)

@@ -1,19 +1,25 @@
 module JRuby::Lint
   module AST
-    module Predicates
-      METHOD_NODES = %w(CALLNODE FCALLNODE VCALLNODE ATTRASSIGNNODE)
+    module MethodCalls
+      def visitCallNode(node)
+        visitMethodCallNode(node)
+      end
 
-      def method_calls_named(*names)
-        opts = names.last.kind_of?(Hash) ? names.pop : {}
-        only_type = opts[:type] && "#{opts[:type].to_s.upcase}NODE"
-        node_types = METHOD_NODES.reject {|t| only_type && t != only_type }
-        select {|n| node_types.include?(n.node_type.to_s) && names.include?(n.name) }
+      def visitFCallNode(node)
+        visitMethodCallNode(node)
+      end
+
+      def visitVCallNode(node)
+        visitMethodCallNode(node)
+      end
+
+      def visitAttrAssignNode(node)
+        visitMethodCallNode(node)
       end
     end
 
     class Visitor
       include Enumerable
-      include Predicates
       include org.jruby.ast.visitor.NodeVisitor
       attr_reader :ast
 
@@ -31,7 +37,7 @@ module JRuby::Lint
       alias each_node each
       alias traverse each
 
-      def visit(node)
+      def visit(method, node)
         @block.call(node) if @block
         node.child_nodes.each do |cn|
           cn.accept(self) rescue nil
@@ -40,7 +46,7 @@ module JRuby::Lint
 
       def method_missing(name, *args, &block)
         if name.to_s =~ /^visit/
-          visit(*args)
+          visit(name, *args)
         else
           super
         end
