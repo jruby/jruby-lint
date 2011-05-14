@@ -14,6 +14,20 @@ if you already haven't, then `gem install jruby-lint`.
 Then simply run `jrlint` in your project to receive a report of
 places in your project where you should investigate further.
 
+## Checks
+
+Here is a list of the current checks implemented:
+
+- Report class variable assignments, which might not be thread-safe.
+- Report usage of ObjectSpace.each_object and ObjectSpace._id2ref
+  which are expensive and disabled by default
+- Report usage of Thread.critical, which is discouraged in favor of a
+  plain Mutex.
+- Report known gems and libraries that use C extensions and try to
+  provide known alternatives.
+- Report usage of Kernel#fork (which does not work) and Kernel#exec
+  (which does not replace the current process).
+
 ## TODO
 
 Here is a list of checks and options we'd like to implement:
