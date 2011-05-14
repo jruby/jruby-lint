@@ -12,7 +12,7 @@ end
 require 'jruby/lint/ast'
 require 'jruby/lint/project'
 require 'jruby/lint/finding'
-require 'jruby/lint/gems'
+require 'jruby/lint/libraries'
 require 'jruby/lint/collectors'
 require 'jruby/lint/checkers'
 require 'jruby/lint/reporters'

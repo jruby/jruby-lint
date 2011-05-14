@@ -22,7 +22,7 @@ module JRuby::Lint
       end
 
       def check_gem(collector, call_node)
-        @gems ||= collector.project.gems_info.gems
+        @gems ||= collector.project.libraries.gems
         gem_name = gem_name(call_node)
         if instructions = @gems[gem_name]
           CheckGemNode.add_wiki_link_finding(collector)

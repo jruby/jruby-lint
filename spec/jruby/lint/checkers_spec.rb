@@ -14,8 +14,8 @@ describe JRuby::Lint::Checkers do
   Given(:findings) { [] }
   Given(:ast) { JRuby.parse script }
   Given(:gems) { { "rdiscount" => "may not work", "bson_ext" => "not needed" } }
-  Given(:gems_info) { double "gem info", :gems => gems }
-  Given(:project) { double "project", :gems_info => gems_info }
+  Given(:libraries) { double "libraries", :gems => gems }
+  Given(:project) { double "project", :libraries => libraries }
   Given(:collector) { double "collector", :ast => ast, :findings => findings, :project => project }
 
   context "Fork/exec checker" do
@@ -55,7 +55,7 @@ describe JRuby::Lint::Checkers do
   context "Gem checker" do
     Given(:checker) { JRuby::Lint::Checkers::Gem.new }
 
-    context "creates a finding for a gem mentioned in the gems info" do
+    context "creates a finding for a gem mentioned in the libraries" do
       Given(:script) { "gem 'rdiscount'" }
       When { checker.check(collector) }
       Then { findings.size.should == 2 }

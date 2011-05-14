@@ -4,7 +4,7 @@ require 'tempfile'
 require 'fileutils'
 
 module JRuby::Lint
-  module Gems
+  class Libraries
     class Cache
       def initialize(cache_dir = nil)
         @cache_dir = cache_dir || ENV['JRUBY_LINT_CACHE'] ||
@@ -83,27 +83,25 @@ module JRuby::Lint
       end
     end
 
-    class Info
-      SOURCES = [CExtensions]
+    SOURCES = [CExtensions]
 
-      attr_reader :gems
+    attr_reader :gems
 
-      def initialize(cache)
-        @sources = SOURCES.map {|s| s.new(cache) }
-      end
+    def initialize(cache)
+      @sources = SOURCES.map {|s| s.new(cache) }
+    end
 
-      def load
-        @gems = {}.tap do |gems|
-          @sources.each do |s|
-            s.load
-            gems.update(s.gems)
-          end
+    def load
+      @gems = {}.tap do |gems|
+        @sources.each do |s|
+          s.load
+          gems.update(s.gems)
         end
       end
+    end
 
-      def gems
-        @gems ||= load
-      end
+    def gems
+      @gems ||= load
     end
   end
 end

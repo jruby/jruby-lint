@@ -5,7 +5,7 @@ module JRuby::Lint
   class Project
     DEFAULT_TAGS = %w(error warning info)
 
-    attr_reader :collectors, :reporters, :findings, :files, :tags, :gems_info
+    attr_reader :collectors, :reporters, :findings, :files, :tags, :libraries
 
     def initialize(options = OpenStruct.new)
       @tags = DEFAULT_TAGS
@@ -20,7 +20,7 @@ module JRuby::Lint
       @sources = options.files || (options.eval ? [] : Dir['./**/*'])
       load_collectors
       load_reporters
-      load_gems_info
+      load_libraries
     end
 
     def run
@@ -49,8 +49,8 @@ module JRuby::Lint
       @reporters = [(STDOUT.tty? ? Reporters::ANSIColor : Reporters::Text).new(self, STDOUT)]
     end
 
-    def load_gems_info
-      @gems_info = Gems::Info.new(Gems::Cache.new)
+    def load_libraries
+      @libraries = Libraries.new(Libraries::Cache.new)
     end
   end
 end

@@ -1,8 +1,8 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
-describe JRuby::Lint::Gems do
+describe JRuby::Lint::Libraries do
   Given(:cache_dir) { ENV['JRUBY_LINT_CACHE'] }
-  Given(:cache) { JRuby::Lint::Gems::Cache.new(cache_dir) }
+  Given(:cache) { JRuby::Lint::Libraries::Cache.new(cache_dir) }
 
   context "cache" do
     Given(:cache_dir) { current_dir }
@@ -43,13 +43,13 @@ describe JRuby::Lint::Gems do
   end
 
   context "c extensions list" do
-    Given(:list) { JRuby::Lint::Gems::CExtensions.new(cache) }
+    Given(:list) { JRuby::Lint::Libraries::CExtensions.new(cache) }
     When { list.load }
     Then { list.gems.keys.should include("rdiscount", "rmagick")}
   end
 
-  context "info" do
-    Given(:info) { JRuby::Lint::Gems::Info.new(cache) }
+  context "aggregate information" do
+    Given(:info) { JRuby::Lint::Libraries.new(cache) }
     When { info.load }
     Then { info.gems.keys.should include("rdiscount", "rmagick")}
   end
