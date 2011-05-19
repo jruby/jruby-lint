@@ -18,7 +18,6 @@ places in your project where you should investigate further.
 
 Here is a list of the current checks implemented:
 
-- Report class variable assignments, which might not be thread-safe.
 - Report usage of ObjectSpace.each_object and ObjectSpace._id2ref
   which are expensive and disabled by default
 - Report usage of Thread.critical, which is discouraged in favor of a

@@ -111,28 +111,6 @@ describe JRuby::Lint::Checkers do
     end
   end
 
-  context "class variable assignment" do
-    Given(:checker) { JRuby::Lint::Checkers::ClassVariables.new }
-
-    context "is OK in a class body" do
-      Given(:script) { "class Foo; @@a = 1; end"}
-      When { collector.run }
-      Then { collector.findings.size.should == 0 }
-    end
-
-    context "is bad in a method body" do
-      Given(:script) { "class Foo; def set_a; @@a = 1; end; end"}
-      When { collector.run }
-      Then { collector.findings.size.should == 1 }
-    end
-
-    context "using ||= in a method body is bad" do
-      Given(:script) { "class Foo; def set_a; @@a ||= 1; end; end"}
-      When { collector.run }
-      Then { collector.findings.size.should == 1 }
-    end
-  end
-
   context "ObjectSpace" do
     Given(:checker) { JRuby::Lint::Checkers::ObjectSpace.new }
 
