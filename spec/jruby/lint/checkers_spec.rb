@@ -132,4 +132,21 @@ describe JRuby::Lint::Checkers do
       Then { collector.findings.size.should == 0 }
     end
   end
+  
+  context "Timeout::timeout" do
+    Given(:checker) { JRuby::Lint::Checkers::Timeout.new }
+    
+    context "::timeout usage" do
+      Given(:script) { "Timeout::timeout(5) { sleep 10 }"}
+      When { collector.run }
+      Then { collector.findings.size.should == 1}
+    end
+    
+    context ".timeout usage" do
+      Given(:script) { "Timeout.timeout(5) { sleep 10 }" }
+      When { collector.run }
+      Then { collector.findings.size.should == 1}
+    end
+    
+  end
 end

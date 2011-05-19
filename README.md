@@ -31,7 +31,6 @@ Here is a list of the current checks implemented:
 
 Here is a list of checks and options we'd like to implement:
 
-- Timeout.timeout
 - Options to save report off to a file.
   - Text, HTML formats
 - Report on more threading and concurrency issues/antipatterns
