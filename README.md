@@ -31,10 +31,12 @@ Here is a list of the current checks implemented:
 
 Here is a list of checks and options we'd like to implement:
 
+- Timeout.timeout
 - Options to save report off to a file.
   - Text, HTML formats
-- Report on threading and concurrency issues
-- Warn about `system("ruby ...")` and the like
+- Report on more threading and concurrency issues/antipatterns
+  - arr.each {|x| arr.delete(x) }
+- Warn about `system("ruby ...")` etc. how they are run in-process by default
 - Try to detect IO/File resource usage without blocks
 - Check .gemspec files for extensions and extconf.rb for
   #create_makefile and warn about compiliing C extensions
