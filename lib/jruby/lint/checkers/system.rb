@@ -20,7 +20,7 @@ module JRuby::Lint
       end
     
       def add_finding(node)
-        collector.findings << Finding.new("Calling system('ruby * ') may cause awkward results",
+        collector.findings << Finding.new("Calling Kernel.system('ruby ...') will get called in-process.  Sometimes this works differently than expected",
                                           [:system, :warning], node.position)
       end
       
@@ -29,9 +29,13 @@ module JRuby::Lint
         child = node.child_nodes.first
         child && 
         %w(ARRAYNODE CONSTNODE).include?(child.node_type.to_s) &&
-        node.args_node[0].value =~ /^\s*ruby/
+        ruby_executable?(node)
       end
-    
+      
+      def ruby_executable?(node)
+        match_on = Regexp.union([/^\s*ruby/i, /\s*j?irb\s*$/i, /\.rb$/i])
+        node.args_node[0].value =~ match_on
+      end
     end
   end
 end
