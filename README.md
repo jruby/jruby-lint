@@ -33,9 +33,9 @@ Here is a list of checks and options we'd like to implement:
 
 - Options to save report off to a file.
   - Text, HTML formats
+- Add in check for `` to make sure not execing ruby ...
 - Report on more threading and concurrency issues/antipatterns
   - arr.each {|x| arr.delete(x) }
-- Warn about `system("ruby ...")` etc. how they are run in-process by default
 - Try to detect IO/File resource usage without blocks
 - Check .gemspec files for extensions and extconf.rb for
   #create_makefile and warn about compiliing C extensions

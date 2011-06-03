@@ -147,6 +147,35 @@ describe JRuby::Lint::Checkers do
       When { collector.run }
       Then { collector.findings.size.should == 1}
     end
+  end
+  
+  
+  context "System" do
+    Given(:checker) { JRuby::Lint::Checkers::System.new }
+    
+    context "calling ruby -v in system should have a finding" do
+      Given(:script) { "system('echo'); system(' ruby -v ');"}
+      When { collector.run }
+      Then { collector.findings.size.should == 1}
+    end
+    
+    context "calling irb or jirb inside of system should add findings" do
+      Given(:script) { "system(' jirb '); system(' irb ');"}
+      When { collector.run }
+      Then { collector.findings.size.should == 2 }
+    end
+    
+    context "calling a ruby file from system should have findings as well" do
+      Given(:script) { "system('exec asdf.rb'); " }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+    
+    context "calling ruby -v in Kernel.system should have a finding" do
+      Given(:script) { "Kernel.system('ruby -v'); Kernel.system('echo \"zomg\"')"}
+      When { collector.run }
+      Then { collector.findings.size.should == 1}
+    end
     
   end
 end
