@@ -26,6 +26,10 @@ Here is a list of the current checks implemented:
   provide known alternatives.
 - Report usage of Kernel#fork (which does not work) and Kernel#exec
   (which does not replace the current process).
+- Report usage of Timeout::timeout which, when used excessively tend
+  to be slow and expensive because of native threads
+- Report behavior difference when using system('ruby'), which launches
+  the command in-process in a new copy of the interpreter for speed
 
 ## TODO
 

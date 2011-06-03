@@ -1,4 +1,9 @@
+=== 0.2.0 / 2011-06-03
+
+- #system('ruby') and #timeout checkers, thanks Matthew Kirk (hexgnu)!
+- Update GitHub SSL cert chain
+
 === 0.1 / 2011-05-18
 
-* Birthday!
+- Birthday!
 
