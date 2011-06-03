@@ -132,50 +132,56 @@ describe JRuby::Lint::Checkers do
       Then { collector.findings.size.should == 0 }
     end
   end
-  
+
   context "Timeout::timeout" do
     Given(:checker) { JRuby::Lint::Checkers::Timeout.new }
-    
+
     context "::timeout usage" do
       Given(:script) { "Timeout::timeout(5) { sleep 10 }"}
       When { collector.run }
       Then { collector.findings.size.should == 1}
     end
-    
+
     context ".timeout usage" do
       Given(:script) { "Timeout.timeout(5) { sleep 10 }" }
       When { collector.run }
       Then { collector.findings.size.should == 1}
     end
   end
-  
-  
+
+
   context "System" do
     Given(:checker) { JRuby::Lint::Checkers::System.new }
-    
-    context "calling ruby -v in system should have a finding" do
-      Given(:script) { "system('echo'); system(' ruby -v ');"}
+
+    context "calling ruby -v in system" do
+      Given(:script) { "system('echo'); system('/usr/bin/ruby -v')"}
       When { collector.run }
       Then { collector.findings.size.should == 1}
     end
-    
-    context "calling irb or jirb inside of system should add findings" do
-      Given(:script) { "system(' jirb '); system(' irb ');"}
+
+    context "calling ruby in the first argument to system" do
+      Given(:script) { "system('/usr/bin/ruby', '-v')"}
+      When { collector.run }
+      Then { collector.findings.size.should == 1}
+    end
+
+    context "calling irb or jirb from system" do
+      Given(:script) { "system('jirb'); system('irb')"}
       When { collector.run }
       Then { collector.findings.size.should == 2 }
     end
-    
-    context "calling a ruby file from system should have findings as well" do
-      Given(:script) { "system('exec asdf.rb'); " }
+
+    context "calling a .rb file from system" do
+      Given(:script) { "system('asdf.rb')" }
       When { collector.run }
       Then { collector.findings.size.should == 1 }
     end
-    
+
     context "calling ruby -v in Kernel.system should have a finding" do
       Given(:script) { "Kernel.system('ruby -v'); Kernel.system('echo \"zomg\"')"}
       When { collector.run }
       Then { collector.findings.size.should == 1}
     end
-    
+
   end
 end
