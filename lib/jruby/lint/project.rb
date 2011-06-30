@@ -19,7 +19,7 @@ module JRuby::Lint
 
       @sources = options.files || (options.eval ? [] : Dir['./**/*'])
       load_collectors
-      load_reporters
+      load_reporters(options)
       load_libraries
     end
 
@@ -45,8 +45,11 @@ module JRuby::Lint
       end
     end
 
-    def load_reporters
-      @reporters = [(STDOUT.tty? ? Reporters::ANSIColor : Reporters::Text).new(self, STDOUT)]
+    def load_reporters(options)
+      @reporters = []
+      @reporters << Reporters::Html.new(self, options.html) if options.html
+      @reporters << Reporters::ANSIColor.new(self, STDOUT) if options.ansi || STDOUT.tty?
+      @reporters << Reporters::Text.new(self, STDOUT) if options.text || @reporters.empty?
     end
 
     def load_libraries

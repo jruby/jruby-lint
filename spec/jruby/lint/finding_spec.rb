@@ -28,4 +28,16 @@ describe JRuby::Lint::Finding do
     When { @finding = JRuby::Lint::Finding.new(message, tags, file, line) }
     Then { @finding.tags.should == ["1", "two", "3.0"] }
   end
+
+  it "is an error when it includes the tag `error'" do
+    Given(:tags) { [:error] }
+    When { @finding = JRuby::Lint::Finding.new(message, tags, file, line) }
+    Then { @finding.should be_error }
+  end
+
+  it "is a warning when it includes the tag `warning'" do
+    Given(:tags) { [:warning] }
+    When { @finding = JRuby::Lint::Finding.new(message, tags, file, line) }
+    Then { @finding.should be_warning }
+  end
 end

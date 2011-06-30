@@ -23,6 +23,18 @@ module JRuby
             @options.eval << v
           end
 
+          opts.on('--text', 'print report as text') do
+            @options.text = true
+          end
+
+          opts.on('--ansi', 'print report as ansi text') do
+            @options.ansi = true
+          end
+
+          opts.on('--html [REPORT_FILE]', 'print report as html file') do |file|
+            @options.html = file || 'jruby-lint.html'
+          end
+
           opts.on_tail("-v", "--version", "Print version and exit") do
             require 'jruby/lint/version'
             puts "JRuby-Lint version #{VERSION}"

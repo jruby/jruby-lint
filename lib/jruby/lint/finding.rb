@@ -8,6 +8,14 @@ module JRuby::Lint
       super
     end
 
+    def error?
+      tags.include?('error')
+    end
+
+    def warning?
+      tags.include?('warning')
+    end
+
     def to_s
       "#{file}:#{line}: [#{tags.join(', ')}] #{message}"
     end

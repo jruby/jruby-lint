@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>JRuby-lint diagnostics report</title>
+    <style>
+ul { padding: 0px; }
+li { list-style: none; margin: 0px; padding: 0px; display: list-item; }
+body { font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif; font-size:10.5pt; margin: 0; }
+
+h1 { color: #383838; font-size: 4em; }
+.site { width: 70em; margin: 0 auto; padding: .1em 5em; }
+nav { position: relative; }
+#findings li { position: relative; padding: .5em 1em; margin-top: .3em; }
+.message { border-left: 5px solid silver; background: #EEE; }
+.error { border-left: 5px solid #b22222; background: #E6BCB5; }
+.warning { border-left: 5px solid #FF9900; background: #FFFF99; }
+    </style>
+  </head>
+  <body>
+    <div class="site">
+      <nav>
+        <h1>JRuby diagnostics</h1>
+      </nav>
+      <div id="findings">
+        <% unless @findings.empty? %>
+        <ul>
+          <% @findings.each do |finding| %>
+            <% if finding.error? %>
+              <li class="error"><%= finding %></li>
+            <% elsif finding.warning? %>
+              <li class="warning"><%= finding %></li>
+            <% else %>
+              <li class="message"><%= finding %></li>
+            <% end %>
+          <% end %>
+        </ul>
+        <% end %>
+      </div> <!-- div#findings -->
+    </div> <!-- div.site -->
+  </body>
+</html>
