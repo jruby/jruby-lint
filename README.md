@@ -31,12 +31,15 @@ Here is a list of the current checks implemented:
 - Report behavior difference when using system('ruby'), which launches
   the command in-process in a new copy of the interpreter for speed
 
+## Reports
+
+JRuby-lint supports text and html reports. Run jrlint with the option --html
+to generate an html report with the results.
+
 ## TODO
 
 Here is a list of checks and options we'd like to implement:
 
-- Options to save report off to a file.
-  - Text, HTML formats
 - Add in check for `` to make sure not execing ruby ...
 - Report on more threading and concurrency issues/antipatterns
   - arr.each {|x| arr.delete(x) }
