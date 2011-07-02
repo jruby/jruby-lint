@@ -7,9 +7,11 @@ li { list-style: none; margin: 0px; padding: 0px; display: list-item; }
 body { font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif; font-size:10.5pt; margin: 0; }
 
 h1 { color: #383838; font-size: 4em; }
+p { color: #383838; font-size: 1.8em; }
 .site { width: 70em; margin: 0 auto; padding: .1em 5em; }
 nav { position: relative; }
 #findings li { position: relative; padding: .5em 1em; margin-top: .3em; }
+#congrats { padding-top: 2em; }
 .message { border-left: 5px solid silver; background: #EEE; }
 .error { border-left: 5px solid #b22222; background: #E6BCB5; }
 .warning { border-left: 5px solid #FF9900; background: #FFFF99; }
@@ -34,6 +36,11 @@ nav { position: relative; }
             <% end %>
           <% end %>
         </ul>
+        <% else %>
+        <div id="congrats">
+          <p>Congratulations!</p>
+          <p>We didn't find any issue and your application should run just fine with JRuby.</p>
+        </div> <!-- div#congrats -->
         <% end %>
       </div> <!-- div#findings -->
     </div> <!-- div.site -->

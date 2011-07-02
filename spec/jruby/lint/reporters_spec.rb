@@ -54,5 +54,10 @@ describe JRuby::Lint::Reporters do
       Then { reporter.report [finding] }
       Then { File.read('lint-spec-report.html').should include('<li class="warning">hello</li>') }
     end
+
+    context "shows a nice message when we don't find any issue" do
+      When { reporter.report [] }
+      Then { File.read('lint-spec-report.html').should include('Congratulations!') }
+    end
   end
 end
