@@ -30,6 +30,7 @@ module JRuby::Lint
         reporters.each {|r| r.report(c.findings)}
         @findings += c.findings
       end
+      reporters.each {|r| r.print_report(@findings) if r.respond_to?(:print_report) }
     end
 
     private

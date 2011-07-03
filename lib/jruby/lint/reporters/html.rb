@@ -10,7 +10,14 @@ module JRuby::Lint
       end
 
       def report(findings)
-        @findings = findings
+      end
+
+      def print_report(findings)
+        @findings = []
+        findings.each do |finding|
+          @findings << finding unless (@tags & finding.tags).empty?
+        end
+
         File.open(@output, 'w') do |file|
           file.write @template.result(binding)
         end

@@ -45,18 +45,18 @@ describe JRuby::Lint::Reporters do
 
     context "shows a finding tagged 'error' in red" do
       Given(:finding) { double "finding", :to_s => "hello", :tags => %w(error), :error? => true }
-      Then { reporter.report [finding] }
+      Then { reporter.print_report [finding] }
       Then { File.read('lint-spec-report.html').should include('<li class="error">hello</li>') }
     end
 
     context "shows a finding tagged 'warning' in yellow" do
       Given(:finding) { double "finding", :to_s => "hello", :tags => %w(warning), :error? => false, :warning? => true }
-      Then { reporter.report [finding] }
+      Then { reporter.print_report [finding] }
       Then { File.read('lint-spec-report.html').should include('<li class="warning">hello</li>') }
     end
 
     context "shows a nice message when we don't find any issue" do
-      When { reporter.report [] }
+      When { reporter.print_report [] }
       Then { File.read('lint-spec-report.html').should include('Congratulations!') }
     end
   end

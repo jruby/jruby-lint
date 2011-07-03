@@ -68,6 +68,11 @@ describe JRuby::Lint::Project do
     end
 
     When do
+      reporter.stub!(:print_report)
+      reporter.should_receive(:print_report).with([finding])
+    end
+
+    When do
       project.collectors.replace [collector]
       project.reporters.replace [reporter]
     end
