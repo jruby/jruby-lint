@@ -1,6 +1,8 @@
 module JRuby
   module Lint
     class CLI
+      attr_reader :options
+
       def initialize(args)
         process_options(args)
       end
@@ -21,6 +23,11 @@ module JRuby
           opts.on("-e", '--eval SCRIPT', "Lint an inline script") do |v|
             @options.eval ||= []
             @options.eval << v
+          end
+
+          opts.on("-t", "--tag TAG", "Report findings tagged with TAG") do |v|
+            @options.tags ||= []
+            @options.tags << v
           end
 
           opts.on('--text', 'print report as text') do

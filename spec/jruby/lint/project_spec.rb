@@ -80,44 +80,52 @@ describe JRuby::Lint::Project do
     Then { project.run }
   end
 
-  context 'loading reporters' do
+  context 'initializing' do
     Given(:options) { OpenStruct.new }
     Given(:project) { in_current_dir { JRuby::Lint::Project.new(options) } }
 
-    context 'with html option' do
-      Given(:options) { OpenStruct.new(:html => 'report.html') }
-      Then { project.reporters.should have(1).reporter }
-      Then { project.reporters.first.should be_an_instance_of(JRuby::Lint::Reporters::Html) }
+    context 'tags' do
+      Given(:options) { OpenStruct.new(:tags => ["debug"]) }
+      Then { project.tags.should include("debug") }
+      Then { project.tags.should include(*JRuby::Lint::Project::DEFAULT_TAGS) }
     end
 
-    context 'with ansi option' do
-      Given(:options) { OpenStruct.new(:ansi => true) }
-      Then { project.reporters.should have(1).reporter }
-      Then { project.reporters.first.should be_an_instance_of(JRuby::Lint::Reporters::ANSIColor) }
-    end
+    context 'reporters' do
+      context 'with html option' do
+        Given(:options) { OpenStruct.new(:html => 'report.html') }
+        Then { project.reporters.should have(1).reporter }
+        Then { project.reporters.first.should be_an_instance_of(JRuby::Lint::Reporters::Html) }
+      end
 
-    context 'with text option' do
-      Given(:options) { OpenStruct.new(:text => true) }
-      Then { project.reporters.should have(1).reporter }
-      Then { project.reporters.first.should be_an_instance_of(JRuby::Lint::Reporters::Text) }
-    end
+      context 'with ansi option' do
+        Given(:options) { OpenStruct.new(:ansi => true) }
+        Then { project.reporters.should have(1).reporter }
+        Then { project.reporters.first.should be_an_instance_of(JRuby::Lint::Reporters::ANSIColor) }
+      end
 
-    context 'with tty' do
-      Given { STDOUT.stub(:tty?).and_return(true) }
-      Then { project.reporters.should have(1).reporter }
-      Then { project.reporters.first.should be_an_instance_of(JRuby::Lint::Reporters::ANSIColor) }
-    end
+      context 'with text option' do
+        Given(:options) { OpenStruct.new(:text => true) }
+        Then { project.reporters.should have(1).reporter }
+        Then { project.reporters.first.should be_an_instance_of(JRuby::Lint::Reporters::Text) }
+      end
 
-    context 'without any option' do
-      Then { project.reporters.should have(1).reporter }
-      Then { project.reporters.first.should be_an_instance_of(JRuby::Lint::Reporters::Text) }
-    end
+      context 'with tty' do
+        Given { STDOUT.stub(:tty?).and_return(true) }
+        Then { project.reporters.should have(1).reporter }
+        Then { project.reporters.first.should be_an_instance_of(JRuby::Lint::Reporters::ANSIColor) }
+      end
 
-    context 'with several options' do
-      Given(:options) { OpenStruct.new(:ansi => true, :html => 'report.html') }
-      Then { project.reporters.should have(2).reporter }
-      Then { project.reporters.map(&:class).should include(JRuby::Lint::Reporters::ANSIColor) }
-      Then { project.reporters.map(&:class).should include(JRuby::Lint::Reporters::Html) }
+      context 'without any option' do
+        Then { project.reporters.should have(1).reporter }
+        Then { project.reporters.first.should be_an_instance_of(JRuby::Lint::Reporters::Text) }
+      end
+
+      context 'with several options' do
+        Given(:options) { OpenStruct.new(:ansi => true, :html => 'report.html') }
+        Then { project.reporters.should have(2).reporter }
+        Then { project.reporters.map(&:class).should include(JRuby::Lint::Reporters::ANSIColor) }
+        Then { project.reporters.map(&:class).should include(JRuby::Lint::Reporters::Html) }
+      end
     end
   end
 end

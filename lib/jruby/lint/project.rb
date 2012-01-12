@@ -8,13 +8,17 @@ module JRuby::Lint
     attr_reader :collectors, :reporters, :findings, :files, :tags, :libraries
 
     def initialize(options = OpenStruct.new)
-      @tags = DEFAULT_TAGS
+      @tags = DEFAULT_TAGS.dup
       @collectors = []
       @files = Set.new
 
       if options.eval
         options.eval.each {|e| @collectors << JRuby::Lint::Collectors::Ruby.new(self, '-e', e) }
         @files += @collectors
+      end
+
+      if options.tags
+        @tags += options.tags
       end
 
       @sources = options.files || (options.eval ? [] : Dir['./**/*'])

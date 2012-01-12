@@ -2,6 +2,13 @@ require File.expand_path('../../../spec_helper', __FILE__)
 require 'jruby/lint/cli'
 
 describe JRuby::Lint::CLI do
+  context "with the tag option" do
+    Given(:cli) { JRuby::Lint::CLI.new(args) }
+    Given(:args) { ["--tag", "debug"]}
+    When { cli }
+    Then { cli.options.tags.should include("debug") }
+  end
+
   context "when launched" do
     Given(:command) { "ruby -I#{project_dir}/lib -S #{project_dir}/bin/jrlint #{args}" }
 
