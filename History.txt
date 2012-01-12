@@ -1,3 +1,9 @@
+=== 0.3.1 / 2012/01/12
+
+- Allow versions of nokogiri >= 1.5.0.beta.4 (e.g., 1.5.0)
+- Enable adding tags from the command-line (e.g., 'debug')
+- Upgrade project gems: rake, rspec, childprocess
+
 === 0.3.0 / 2011-07-04
 
 - html reports
