@@ -4,6 +4,10 @@ module JRuby::Lint
       include Checker
       include CheckGemNode
 
+      def initialize
+        @gemspec_block_var = nil
+      end
+
       def visitCallNode(node)
         # Gem::Specification.new do |s| =>
         #
