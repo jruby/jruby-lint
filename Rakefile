@@ -13,8 +13,8 @@ require 'open-uri'
 require 'net/https'
 
 file "spec/fixtures/C-Extension-Alternatives.html" do |t|
-  require 'jruby/lint/gems'
-  cache = JRuby::Lint::Gems::Cache.new('spec/fixtures')
+  require 'jruby/lint/libraries'
+  cache = JRuby::Lint::Libraries::Cache.new('spec/fixtures')
   cache.fetch("C-Extension-Alternatives")
 end
 
