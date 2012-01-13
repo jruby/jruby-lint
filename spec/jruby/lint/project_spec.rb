@@ -83,6 +83,7 @@ describe JRuby::Lint::Project do
   context 'initializing' do
     Given(:options) { OpenStruct.new }
     Given(:project) { in_current_dir { JRuby::Lint::Project.new(options) } }
+    When { STDOUT.stub!(:tty?).and_return(false) }
 
     context 'tags' do
       Given(:options) { OpenStruct.new(:tags => ["debug"]) }
