@@ -18,6 +18,17 @@ module JRuby::Lint
       end
     end
 
+    module Helpers
+      def find_first(node, &block)
+        descendants(node).detect(&block)
+      end
+
+      def descendants(node)
+        children = node.child_nodes
+        children.empty? ? [node] : children.map {|n| [n] + descendants(n) }.flatten
+      end
+    end
+
     class Visitor
       include Enumerable
       include org.jruby.ast.visitor.NodeVisitor

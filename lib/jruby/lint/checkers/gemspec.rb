@@ -3,6 +3,7 @@ module JRuby::Lint
     class Gemspec
       include Checker
       include CheckGemNode
+      include AST::Helpers
 
       def initialize
         @gemspec_block_var = nil
@@ -23,7 +24,8 @@ module JRuby::Lint
             node.receiver_node.node_type.to_s == "COLON2NODE" && # :: - Colon2
             node.receiver_node.name == "Specification" &&        # ::Specification
             node.receiver_node.left_node.name == "Gem"           # Gem::Specification
-          @gemspec_block_var = node.iter_node.var_node.name
+          arg_node = find_first(node.iter_node.var_node) {|n| n.respond_to?(:name) }
+          @gemspec_block_var = arg_node.name
           return proc { @gemspec_block_var = nil }
         end
 
