@@ -10,7 +10,7 @@ describe JRuby::Lint::Libraries do
     context "with net access", :requires_net => true do
       context "fetch" do
         When { cache.fetch('C-Extension-Alternatives') }
-        Then { check_file_presence('C-Extension-Alternatives.html', true) }
+        Then { check_file_presence(['C-Extension-Alternatives.html'], true) }
       end
 
       context "refreshes a file that's too old" do
@@ -27,12 +27,12 @@ describe JRuby::Lint::Libraries do
 
       context "store assumes .html extension by default" do
         When { cache.store('hello.yml', 'hi')}
-        Then { check_file_presence('hello.yml', true) }
+        Then { check_file_presence(['hello.yml'], true) }
       end
 
       context "store assumes .html extension by default" do
         When { cache.store('hello', 'hi')}
-        Then { check_file_presence('hello.html', true) }
+        Then { check_file_presence(['hello.html'], true) }
       end
 
       context "fetch should not access net when file is cached" do
