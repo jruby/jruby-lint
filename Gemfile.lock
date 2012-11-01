@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jruby-lint (0.3.1)
+    jruby-lint (0.4.0)
       jruby-openssl
       nokogiri (>= 1.5.0.beta.4)
       term-ansicolor
@@ -36,13 +36,13 @@ GEM
       thor (>= 0.14.6)
     guard-rspec (0.3.1)
       guard (>= 0.2.2)
-    jruby-openssl (0.7.4)
-      bouncy-castle-java
+    jruby-openssl (0.7.7)
+      bouncy-castle-java (>= 1.5.0146.1)
     json (1.7.5-java)
     listen (0.5.3)
     lumberjack (1.0.2)
     method_source (0.8.1)
-    nokogiri (1.5.0-java)
+    nokogiri (1.5.2-java)
     pry (0.9.10-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
