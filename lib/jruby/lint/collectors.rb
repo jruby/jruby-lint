@@ -25,7 +25,7 @@ module JRuby::Lint
               res = ch.send(method, node)
               after_hooks << res if res.respond_to?(:call)
             end
-          rescue => e
+          rescue Exception => e
             ch.collector.findings << Finding.new("Exception while traversing: #{e.message}\n  at #{e.backtrace.first}",
                                                  [:internal, :debug], node.position)
           end
