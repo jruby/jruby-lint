@@ -184,4 +184,82 @@ describe JRuby::Lint::Checkers do
     end
 
   end
+
+  context "Non-atomic operator assignment" do
+    Given(:checker) { JRuby::Lint::Checkers::NonAtomic.new }
+
+    context "class variable or-assignment" do
+      Given(:script) { "@@foo ||= 1" }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+
+    context "instance variable or-assignment" do
+      Given(:script) { "@foo ||= 1" }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+
+    context "attribute or-assignment" do
+      Given(:script) { "foo.bar ||= 1" }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+
+    context "element or-assignment" do
+      Given(:script) { "foo[bar] ||= 1" }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+
+    context "class variable and-assignment" do
+      Given(:script) { "@@foo &&= 1" }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+
+    context "instance variable and-assignment" do
+      Given(:script) { "@foo &&= 1" }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+
+    context "attribute and-assignment" do
+      Given(:script) { "foo.bar &&= 1" }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+
+    context "element and-assignment" do
+      Given(:script) { "foo[bar] &&= 1" }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+
+    pending "needs better representation in AST" do
+      context "class variable op-assignment" do
+	Given(:script) { "@@foo += 1" }
+	When { collector.run }
+	Then { collector.findings.size.should == 1 }
+      end
+
+      context "instance variable op-assignment" do
+	Given(:script) { "@foo += 1" }
+	When { collector.run }
+	Then { collector.findings.size.should == 1 }
+      end
+    end
+
+    context "attribute op-assignment" do
+      Given(:script) { "foo.bar += 1" }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+
+    context "element op-assignment" do
+      Given(:script) { "foo[bar] += 1" }
+      When { collector.run }
+      Then { collector.findings.size.should == 1 }
+    end
+  end
 end
