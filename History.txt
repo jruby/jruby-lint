@@ -1,3 +1,8 @@
+=== 0.4.1 / 2012/02/26
+
+- Add licensing information
+- Add nonatomic assignment operators (||=, &&= etc.)
+
 === 0.4.0 / 2012/11/1
 
 - Get failing specs fixed on 1.9 (JRuby 1.7.0)
