@@ -66,3 +66,15 @@ Here is a list of checks and options we'd like to implement:
   and/or test suite runs
 
 [install]: http://jruby.org/getting-started
+
+## License
+
+JRuby-Lint is Copyright (c) 2007-2013 The JRuby project, and is released
+under a tri EPL/GPL/LGPL license. You can use it, redistribute it
+and/or modify it under the terms of the:
+
+  Eclipse Public License version 1.0
+  GNU General Public License version 2
+  GNU Lesser General Public License version 2.1
+
+See the file `LICENSE.txt` in distribution for details.
