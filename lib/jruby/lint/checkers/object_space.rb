@@ -7,10 +7,12 @@ module JRuby::Lint
       def visitCallNode(node)
         if METHODS.include?(node.name)
           begin
-            next unless node.receiver_node.node_type.to_s == "CONSTNODE" && node.receiver_node.name == "ObjectSpace"
-            next if node.args_node && node.args_node.size == 1 &&
-              %w(Class Module).include?(node.args_node[0].name)
-            add_finding(collector, node)
+            if node.receiver_node.node_type.to_s == "CONSTNODE" && node.receiver_node.name == "ObjectSpace" then
+              if node.args_node && node.args_node.size == 1 &&
+                %w(Class Module).include?(node.args_node[0].name) then
+                add_finding(collector, node)
+              end
+            end
           rescue
           end
         end
