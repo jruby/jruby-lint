@@ -26,9 +26,9 @@ describe JRuby::Lint::Checkers do
 
     context "detects fcall-style" do
       # FCallNoArgBlockNode |fork|
-      Given(:script) { "fork { }; exec('cmd')" }
+      Given(:script) { "fork { }" }
       When { collector.run }
-      Then { expect(collector.findings.size).to eq(2) }
+      Then { expect(collector.findings.size).to eq(1) }
     end
 
     context "detects vcall-style" do
@@ -49,9 +49,9 @@ describe JRuby::Lint::Checkers do
     context "detects Kernel::fork style" do
       # CallNoArgNode |fork|
       #   ConstNode |Kernel|
-      Given(:script) { "Kernel::fork; Kernel::exec('cmd')" }
+      Given(:script) { "Kernel::fork" }
       When { collector.run }
-      Then { expect(collector.findings.size).to eq(2) }
+      Then { expect(collector.findings.size).to eq(1) }
     end
   end
 
