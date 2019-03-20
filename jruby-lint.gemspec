@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+u# -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
 require "jruby/lint/version"
 
@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Nick Sieger"]
   s.email       = ["nick@nicksieger.com"]
-  s.licenses    = ["EPL 1.0", "GPL 2", "LGPL 2.1"]
+  s.licenses    = ["EPL-1.0", "GPL-2.0", "LGPL-2.1"]
   s.homepage    = "https://github.com/jruby/jruby-lint"
   s.summary     = %q{See how ready your Ruby code is to run on JRuby.}
   s.description = %q{This utility presents hints and suggestions to
