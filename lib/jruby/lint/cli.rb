@@ -71,7 +71,7 @@ module JRuby
           puts "OK"
           exit
         else
-          puts "Found #{project.findings.size} items"
+          puts "Found #{project.findings.count { |e| !e.tags.include? "internal" } } items"
           exit 1
         end
       end
