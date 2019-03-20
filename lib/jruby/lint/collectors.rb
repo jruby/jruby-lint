@@ -1,12 +1,15 @@
 module JRuby::Lint
   class Collector
-    attr_accessor :checkers, :findings, :project, :contents, :file
+    attr_accessor :checkers, :findings, :project, :contents, :file, :stack
 
     def initialize(project = nil, file = nil)
       @checkers = Checker.loaded_checkers.map(&:new)
       @checkers.each {|c| c.collector = self }
       @findings = []
       @project, @file = project, file || '<inline-script>'
+
+      # top to bottom list of elements as they are visited
+      @stack = [] # FIXME: ast visiting is not something checkers can see so stored here for now
     end
 
     def add_finding(msg, tags, line=nil)
@@ -14,7 +17,8 @@ module JRuby::Lint
     end
 
     class CheckersVisitor < AST::Visitor
-      attr_reader :collector, :checkers
+      attr_reader :collector, :checkers, :stack
+
 
       def initialize(ast, collector, checkers)
         super(ast)
@@ -22,6 +26,7 @@ module JRuby::Lint
       end
 
       def visit(method, node)
+        @collector.stack.push  node
         after_hooks = []
         checkers.each do |ch|
           begin
@@ -30,12 +35,14 @@ module JRuby::Lint
               after_hooks << res if res.respond_to?(:call)
             end
           rescue Exception => e
+            p e
             collector.add_finding("Exception while traversing: #{e.message}\n  at #{e.backtrace.first}",
                                               [:internal, :debug], node.line+1)
           end
         end
         super
       rescue Exception => e
+        p e
         collector.add_finding("Exception while traversing: #{e.message}\n  at #{e.backtrace.first}",
                                           [:internal, :debug], node.line+1)
       ensure
@@ -43,6 +50,7 @@ module JRuby::Lint
           after_hooks.each {|h| h.call }
         rescue
         end
+        @collector.stack.pop
       end
     end
 

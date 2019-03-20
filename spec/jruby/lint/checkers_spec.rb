@@ -194,66 +194,89 @@ describe JRuby::Lint::Checkers do
       Given(:script) { "@foo ||= 1" }
       When { collector.run }
       Then { expect(collector.findings.size).to eq(1) }
+      Then { expect(collector.findings.first.message).to be =~ /(@foo)/ }
     end
 
     context "attribute or-assignment" do
       Given(:script) { "foo.bar ||= 1" }
       When { collector.run }
       Then { expect(collector.findings.size).to eq(1) }
+      Then { expect(collector.findings.first.message).to be =~ /(bar)/ }
     end
 
     context "element or-assignment" do
       Given(:script) { "foo[bar] ||= 1" }
       When { collector.run }
       Then { expect(collector.findings.size).to eq(1) }
+      Then { expect(collector.findings.first.message).to be =~ /(bar)/ }
     end
 
     context "class variable and-assignment" do
       Given(:script) { "@@foo &&= 1" }
       When { collector.run }
       Then { expect(collector.findings.size).to eq(1) }
+      Then { expect(collector.findings.first.message).to be =~ /(@@foo)/ }
     end
 
     context "instance variable and-assignment" do
       Given(:script) { "@foo &&= 1" }
       When { collector.run }
       Then { expect(collector.findings.size).to eq(1) }
+      Then { expect(collector.findings.first.message).to be =~ /(@foo)/ }
     end
 
     context "attribute and-assignment" do
       Given(:script) { "foo.bar &&= 1" }
       When { collector.run }
       Then { expect(collector.findings.size).to eq(1) }
+      Then { expect(collector.findings.first.message).to be =~ /(bar)/ }
     end
 
     context "element and-assignment" do
       Given(:script) { "foo[bar] &&= 1" }
       When { collector.run }
       Then { expect(collector.findings.size).to eq(1) }
+      Then { expect(collector.findings.first.message).to be =~ /(bar)/ }
     end
 
     context "class variable op-assignment" do
       Given(:script) { "@@foo += 1" }
       When { collector.run }
       Then { expect(collector.findings.size).to eq(1) }
+      Then { expect(collector.findings.first.message).to be =~ /(@@foo)/ }
     end
 
     context "instance variable op-assignment" do
       Given(:script) { "@foo += 1" }
       When { collector.run }
       Then { expect(collector.findings.size).to eq(1) }
+      Then { expect(collector.findings.first.message).to be =~ /(@foo)/ }
     end
 
     context "attribute op-assignment" do
       Given(:script) { "foo.bar += 1" }
       When { collector.run }
       Then { expect(collector.findings.size).to eq(1) }
+      Then { expect(collector.findings.first.message).to be =~ /(bar)/ }
     end
 
     context "element op-assignment" do
       Given(:script) { "foo[bar] += 1" }
       When { collector.run }
       Then { expect(collector.findings.size).to eq(1) }
+      Then { expect(collector.findings.first.message).to be =~ /(bar)/ }
+    end
+
+    context "ignores simple inst assignment" do
+      Given(:script) { "@foo = 1" }
+      When { collector.run }
+      Then { expect(collector.findings.size).to eq(0) }
+    end
+    
+    context "ignores simple cvar assignment" do
+      Given(:script) { "@@foo = 1" }
+      When { collector.run }
+      Then { expect(collector.findings.size).to eq(0) }
     end
   end
 end

@@ -3,7 +3,7 @@ module JRuby::Lint
     class ThreadCritical
       include Checker
 
-      METHODS = %s(critical critical=)
+      METHODS = [:critical, :critical=]
 
       def visitCallNode(node)
         if METHODS.include?(node.name)

@@ -32,7 +32,7 @@ module JRuby::Lint
     class Visitor
       include Enumerable
       include org.jruby.ast.visitor.NodeVisitor
-      attr_reader :ast
+      attr_reader :ast, :stack
 
       def initialize(ast)
         @ast = ast

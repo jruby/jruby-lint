@@ -10,6 +10,18 @@ module JRuby::Lint
       @checkers ||= []
     end
 
+    # Note: for parentage methods below -1 is current visited, -2 is parent ,...
+
+    ##
+    # What is parent during visit of the current node being visited.
+    def parent
+      collector.stack.size >= 2 ? collector.stack[-2] : nil 
+    end
+
+    def grand_parent
+      collector.stack.size >= 3 ? collector.stack[-3] : nil 
+    end
+
     attr_accessor :collector
   end
 
