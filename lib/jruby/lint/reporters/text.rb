@@ -23,7 +23,7 @@ module JRuby::Lint
         msg = if finding.error?
                 red(finding.to_s)
               elsif finding.warning?
-                orange(finding.to_s)
+                cyan(finding.to_s)
               else
                 blue(finding.to_s)
               end
