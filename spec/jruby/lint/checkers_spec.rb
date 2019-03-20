@@ -70,6 +70,19 @@ describe JRuby::Lint::Checkers do
       Then { expect(collector.findings.size).to eq(3) }
     end
 
+    context "ignores platform for gem compatibility if not right platform" do
+      Given(:script) { "gem 'rdiscount', platform: :ruby" }
+      When { collector.run }
+      Then { expect(collector.findings.size).to eq(0) }
+    end
+
+    context "creates a finding if platform for gem compatibility is ours" do
+      Given(:script) { "gem 'rdiscount', platform: :jruby" }
+      When { collector.run }
+      Then { expect(collector.findings.size).to eq(2) }
+    end
+
+
     context "does not create a finding for a gem not mentioned in the gems info" do
       Given(:script) { "gem 'json_pure'" }
       When { collector.run }

@@ -16,10 +16,22 @@ module JRuby::Lint::Checkers
       first_arg.value.to_s if first_arg&.node_type&.to_s == "STRNODE"
     end
 
+    def jruby_gem_entry?(node)
+      node&.args_node&.child_nodes.each do |child|
+        if child&.node_type&.to_s == "HASHNODE"
+          child.pairs.each do |pair|
+            return false if pair.key.name == :platform &&
+                            pair.value.name != :jruby
+          end
+        end
+      end
+      true  
+    end
+
     def check_gem(collector, call_node)
       @gems ||= collector.project.libraries.gems
       gem_name = gem_name(call_node)
-      if instructions = @gems[gem_name]
+      if gem_name && jruby_gem_entry?(call_node) && instructions = @gems[gem_name]
         CheckGemNode.add_wiki_link_finding(collector)
         msg = "Found gem '#{gem_name}' which is reported to have some issues:\n#{instructions}"
         collector.add_finding(msg, [:gems, :warning], call_node.line+1)
