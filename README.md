@@ -23,11 +23,8 @@ Here is a list of the current checks implemented:
 - Report usage of Thread.critical, which is discouraged in favor of a
   plain Mutex.
 - Report known gems and libraries that use C extensions and try to
-  provide known alternatives.
-- Report usage of Kernel#fork (which does not work) and Kernel#exec
-  (which does not replace the current process).
-- Report usage of Timeout::timeout which, when used excessively tend
-  to be slow and expensive because of native threads
+  provide known alternatives (Live data retrieved from https://github.com/jruby/jruby/wiki/C-Extension-Alternatives).
+- Report usage of Kernel#fork (which does not work).
 - Report behavior difference when using system('ruby'), which launches
   the command in-process in a new copy of the interpreter for speed
 
@@ -40,7 +37,6 @@ to generate an html report with the results.
 
 Here is a list of checks and options we'd like to implement:
 
-- Add in check for `` to make sure not execing ruby ...
 - Report on more threading and concurrency issues/antipatterns
   - arr.each {|x| arr.delete(x) }
 - Try to detect IO/File resource usage without blocks
@@ -52,8 +48,6 @@ Here is a list of checks and options we'd like to implement:
 - Detect Bundler gems that have a `platforms` qualifier and ignore
   "platforms :ruby"
 - Change to use jruby-parser
-- 1.8/1.9 parser support/configuration without having to run JRuby
-  itself in the right mode
 - Allow use of a comment marker to suppress individual checks
 
 ### Further Down the Road
