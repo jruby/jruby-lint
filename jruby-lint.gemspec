@@ -6,6 +6,7 @@ Gem::Specification.new do |s|
   s.name        = "jruby-lint"
   s.version     = JRuby::Lint::VERSION
   s.platform    = Gem::Platform::RUBY
+  s.required_ruby_version = '>= 2.5.3'
   s.authors     = ["Nick Sieger"]
   s.email       = ["nick@nicksieger.com"]
   s.licenses    = ["EPL-1.0", "GPL-2.0", "LGPL-2.1"]
