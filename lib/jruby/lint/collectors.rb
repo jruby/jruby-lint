@@ -35,14 +35,12 @@ module JRuby::Lint
               after_hooks << res if res.respond_to?(:call)
             end
           rescue Exception => e
-            p e
             collector.add_finding("Exception while traversing: #{e.message}\n  at #{e.backtrace.first}",
                                               [:internal, :debug], node.line+1)
           end
         end
         super
       rescue Exception => e
-        p e
         collector.add_finding("Exception while traversing: #{e.message}\n  at #{e.backtrace.first}",
                                           [:internal, :debug], node.line+1)
       ensure

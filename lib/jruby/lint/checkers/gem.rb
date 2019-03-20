@@ -25,6 +25,16 @@ module JRuby::Lint::Checkers
           end
         end
       end
+
+      # platform(:mri, ...) { gem 'rdiscount' }
+      # FIXME: Esoteric use of platform(...) { group(...) {} } is still broken
+      if grand_parent.kind_of?(org::jruby::ast::CallNode) &&
+         grand_parent.name == :platforms
+        grand_parent.args_node.child_nodes.each do |child|
+          return false if child&.name != :jruby
+        end
+      end
+
       true  
     end
 
