@@ -146,23 +146,6 @@ describe JRuby::Lint::Checkers do
     end
   end
 
-  context "Timeout::timeout" do
-    Given(:checker) { JRuby::Lint::Checkers::Timeout.new }
-
-    context "::timeout usage" do
-      Given(:script) { "Timeout::timeout(5) { sleep 10 }"}
-      When { collector.run }
-      Then { expect(collector.findings.size).to eq(1) }
-    end
-
-    context ".timeout usage" do
-      Given(:script) { "Timeout.timeout(5) { sleep 10 }" }
-      When { collector.run }
-      Then { expect(collector.findings.size).to eq(1) }
-    end
-  end
-
-
   context "System" do
     Given(:checker) { JRuby::Lint::Checkers::System.new }
 
