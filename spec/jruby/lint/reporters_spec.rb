@@ -32,9 +32,9 @@ describe JRuby::Lint::Reporters do
       Then { reporter.report [finding] }
     end
 
-    context "shows a finding tagged 'warning' in yellow" do
+    context "shows a finding tagged 'warning' in cyan" do
       Given(:finding) { double "finding", :to_s => "hello", :tags => %w(warning), :error? => false, :warning? => true }
-      Given(:output) { double("output").tap {|o| expect(o).to receive(:puts).with(yellow("hello")) } }
+      Given(:output) { double("output").tap {|o| expect(o).to receive(:puts).with(cyan("hello")) } }
 
       Then { reporter.report [finding] }
     end
