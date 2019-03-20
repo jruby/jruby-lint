@@ -23,9 +23,9 @@ module JRuby::Lint
         msg = if finding.error?
                 red(finding.to_s)
               elsif finding.warning?
-                yellow(finding.to_s)
+                orange(finding.to_s)
               else
-                finding.to_s
+                blue(finding.to_s)
               end
         @output.puts msg
       end

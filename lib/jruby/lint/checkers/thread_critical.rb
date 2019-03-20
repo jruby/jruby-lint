@@ -3,12 +3,12 @@ module JRuby::Lint
     class ThreadCritical
       include Checker
 
-      METHODS = %w(critical critical=)
+      METHODS = %s(critical critical=)
 
       def visitCallNode(node)
         if METHODS.include?(node.name)
           begin
-            if node.receiver_node.node_type.to_s == "CONSTNODE" && node.receiver_node.name == "Thread"
+            if node.receiver_node.node_type.to_s == "CONSTNODE" && node.receiver_node.name == :Thread
               add_finding(collector, node)
             end
           rescue
@@ -18,8 +18,8 @@ module JRuby::Lint
       alias visitAttrAssignNode visitCallNode
 
       def add_finding(collector, node)
-        collector.findings << Finding.new("Use of Thread.critical is discouraged. Use a Mutex instead.",
-                                          [:threads, :warning], node.position)
+        collector.add_finding("Use of Thread.critical is discouraged. Use a Mutex instead.",
+                                          [:threads, :warning], node.line+1)
       end
     end
   end

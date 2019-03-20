@@ -9,6 +9,10 @@ module JRuby::Lint
       @project, @file = project, file || '<inline-script>'
     end
 
+    def add_finding(msg, tags, line=nil)
+      @findings << Finding.new(msg, tags, file, line)
+    end
+
     class CheckersVisitor < AST::Visitor
       attr_reader :collector, :checkers
 
@@ -26,14 +30,14 @@ module JRuby::Lint
               after_hooks << res if res.respond_to?(:call)
             end
           rescue Exception => e
-            collector.findings << Finding.new("Exception while traversing: #{e.message}\n  at #{e.backtrace.first}",
-                                              [:internal, :debug], node.position)
+            collector.add_finding("Exception while traversing: #{e.message}\n  at #{e.backtrace.first}",
+                                              [:internal, :debug], node.line+1)
           end
         end
         super
       rescue Exception => e
-        collector.findings << Finding.new("Exception while traversing: #{e.message}\n  at #{e.backtrace.first}",
-                                          [:internal, :debug], node.position)
+        collector.add_finding("Exception while traversing: #{e.message}\n  at #{e.backtrace.first}",
+                                          [:internal, :debug], node.line+1)
       ensure
         begin
           after_hooks.each {|h| h.call }
@@ -47,7 +51,7 @@ module JRuby::Lint
         CheckersVisitor.new(ast, self, checkers).traverse
       rescue SyntaxError => e
         file, line, message = e.message.split(/:\s*/, 3)
-        findings << Finding.new(message, [:syntax, :error], file, line)
+        add_finding(message, [:syntax, :error], line)
       end
     end
 

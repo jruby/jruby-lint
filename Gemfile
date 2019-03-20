@@ -8,4 +8,5 @@ gem 'guard'
 gem 'guard-rspec'
 gem 'growl'
 gem 'rb-fsevent'
-gem 'rcov'
+
+

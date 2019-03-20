@@ -8,14 +8,14 @@ describe JRuby::Lint::Reporters do
 
     context "with a finding sharing a tag with the project" do
       Given(:finding) { double "finding", :to_s => "hello", :tags => %w(info) }
-      Given(:output) { double("output").tap {|o| o.should_receive(:puts).with("hello") } }
+      Given(:output) { double("output").tap {|o| expect(o).to receive(:puts).with("hello") } }
 
       Then { reporter.report [finding] }
     end
 
     context "with a finding sharing no tags with the project" do
       Given(:finding) { double "finding", :to_s => "hello", :tags => %w(debug) }
-      Given(:output) { double("output").tap {|o| o.should_not_receive(:puts) } }
+      Given(:output) { double("output").tap {|o| expect(o).to_not receive(:puts) } }
 
       Then { reporter.report [finding] }
     end
@@ -27,14 +27,14 @@ describe JRuby::Lint::Reporters do
 
     context "shows a finding tagged 'error' in red" do
       Given(:finding) { double "finding", :to_s => "hello", :tags => %w(error), :error? => true }
-      Given(:output) { double("output").tap {|o| o.should_receive(:puts).with(red("hello")) } }
+      Given(:output) { double("output").tap {|o| expect(o).to receive(:puts).with(red("hello")) } }
 
       Then { reporter.report [finding] }
     end
 
     context "shows a finding tagged 'warning' in yellow" do
       Given(:finding) { double "finding", :to_s => "hello", :tags => %w(warning), :error? => false, :warning? => true }
-      Given(:output) { double("output").tap {|o| o.should_receive(:puts).with(yellow("hello")) } }
+      Given(:output) { double("output").tap {|o| expect(o).to receive(:puts).with(yellow("hello")) } }
 
       Then { reporter.report [finding] }
     end
@@ -46,18 +46,18 @@ describe JRuby::Lint::Reporters do
     context "shows a finding tagged 'error' in red" do
       Given(:finding) { double "finding", :to_s => "hello", :tags => %w(error), :error? => true }
       Then { reporter.print_report [finding] }
-      Then { File.read('lint-spec-report.html').should include('<li class="error">hello</li>') }
+      Then { expect(File.read('lint-spec-report.html')).to include('<li class="error">hello</li>') }
     end
 
     context "shows a finding tagged 'warning' in yellow" do
       Given(:finding) { double "finding", :to_s => "hello", :tags => %w(warning), :error? => false, :warning? => true }
       Then { reporter.print_report [finding] }
-      Then { File.read('lint-spec-report.html').should include('<li class="warning">hello</li>') }
+      Then { expect(File.read('lint-spec-report.html')).to include('<li class="warning">hello</li>') }
     end
 
     context "shows a nice message when we don't find any issue" do
       When { reporter.print_report [] }
-      Then { File.read('lint-spec-report.html').should include('Congratulations!') }
+      Then { expect(File.read('lint-spec-report.html')).to include('Congratulations!') }
     end
   end
 end

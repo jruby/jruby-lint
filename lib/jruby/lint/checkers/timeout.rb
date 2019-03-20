@@ -1,21 +1,10 @@
-module JRuby::Lint
-  module Checkers
-    class Timeout
-      include Checker
+class JRuby::Lint::Checkers::Timeout
+  include JRuby::Lint::Checker
 
-      def visitCallNode(node)
-        if node.name == "timeout"
-          begin
-            add_finding(collector, node)
-          rescue
-          end
-        end
-      end
-
-      def add_finding(collector, node)
-        collector.findings << Finding.new("Timeout in JRuby does not work in many cases",
-                                          [:timeout, :warning], node.position)
-      end
+  def visitCallNode(node)
+    if node.name == :timeout
+      collector.add_finding("Timeout in JRuby does not work in many cases",
+                            [:timeout, :warning], node.line+1)
     end
   end
 end
