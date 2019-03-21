@@ -22,6 +22,12 @@ module JRuby::Lint
       collector.stack.size >= 3 ? collector.stack[-3] : nil 
     end
 
+    ##
+    # source line with line node provides
+    def src_line(line)
+      collector.contents.split(/\n/)[line]
+    end
+
     attr_accessor :collector
   end
 

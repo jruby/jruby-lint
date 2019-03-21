@@ -13,7 +13,6 @@ module JRuby::Lint
     end
 
     def add_finding(message, tags, line=nil)
-      puts caller if (line == "1") 
       src_line = line ? contents.split(/\n/)[line-1] : nil
       @findings << Finding.new(message, tags, file, line, src_line)
     end

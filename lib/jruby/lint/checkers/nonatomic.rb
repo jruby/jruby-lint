@@ -18,7 +18,8 @@ module JRuby::Lint
       end
 
       def visitOpElementAsgnNode(node)
-        add_finding(collector, node, node)
+        name = src_line(node.line).split(node.operator_name + '=', 2)[0].strip
+        add_finding(collector, node, name)
       end
 
       def visitOpAsgnNode(node)
