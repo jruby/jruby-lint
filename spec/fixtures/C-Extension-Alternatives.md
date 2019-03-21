@@ -31,6 +31,7 @@ If you are interested in helping us port an extension to JRuby, this article is 
 |[therubyracer][]|Try using [therubyrhino][] instead (or [dienashorner][] on Java 8+).|
 |[kyotocabinet][]|Try using [kyotocabinet-java][] instead. This isn't 100% complete yet, but it covers most of the API.|
 |[memcached][]|Try using [jruby-memcached][] instead. Alternatively you can use [jruby-ehcache][], a JRuby interface to Java's (JSR-107 compliant) Ehcache.|
+|[charlock_holmes][]|Use [charlock_holmes-jruby][] instead.|
 <!-- suggestions end -->
 
 Please add to this list with your findings.
@@ -75,4 +76,6 @@ Please add to this list with your findings.
 [activerecord-jdbcsqlite3-adapter]: https://rubygems.org/gems/activerecord-jdbcsqlite3-adapter
 [activerecord-jdbcpostgresql-adapter]: https://rubygems.org/gems/activerecord-jdbcpostgresql-adapter
 [pg_jruby]: https://rubygems.org/gems/pg_jruby
+[charlock_holmes]: https://github.com/brianmario/charlock_holmes
+[charlock_holmes-jruby]: https://github.com/siuying/charlock_holmes-jruby
 <!-- links start -->

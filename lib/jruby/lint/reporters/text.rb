@@ -1,8 +1,8 @@
 module JRuby::Lint
   module Reporters
     class Text
-      def initialize(project, output)
-        @tags, @output = project.tags, output
+      def initialize(project, output, options=OpenStruct.new)
+        @tags, @output, @options = project.tags, output, options
       end
 
       def report(findings)
@@ -28,6 +28,7 @@ module JRuby::Lint
                 blue(finding.to_s)
               end
         @output.puts msg
+        @output.puts finding.src_line if finding.src_line && !@options.no_src_line
       end
     end
   end

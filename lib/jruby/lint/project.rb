@@ -52,9 +52,9 @@ module JRuby::Lint
 
     def load_reporters(options)
       @reporters = []
-      @reporters << Reporters::Html.new(self, options.html) if options.html
-      @reporters << Reporters::ANSIColor.new(self, STDOUT) if options.ansi || STDOUT.tty?
-      @reporters << Reporters::Text.new(self, STDOUT) if options.text || @reporters.empty?
+      @reporters << Reporters::Html.new(self, options.html, options) if options.html
+      @reporters << Reporters::ANSIColor.new(self, STDOUT, options) if options.ansi || STDOUT.tty?
+      @reporters << Reporters::Text.new(self, STDOUT, options) if options.text || @reporters.empty?
     end
 
     def load_libraries

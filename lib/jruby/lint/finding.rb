@@ -1,5 +1,5 @@
 module JRuby::Lint
-  class Finding < Struct.new(:message, :tags, :file, :line)
+  class Finding < Struct.new(:message, :tags, :file, :line, :src_line)
     def initialize(*args)
       args[1].map! {|x| x.to_s } if args.size > 1
       if args.size > 2 && args[2].respond_to?(:file) && args[2].respond_to?(:line)

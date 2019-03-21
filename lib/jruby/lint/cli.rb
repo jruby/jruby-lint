@@ -38,6 +38,10 @@ module JRuby
             @options.ansi = true
           end
 
+          opts.on('--no-source-line', 'do not print out line of source') do
+            @options.no_src_line = true
+          end
+
           opts.on('--html [REPORT_FILE]', 'print report as html file') do |file|
             @options.html = file || 'jruby-lint.html'
           end
@@ -55,6 +59,9 @@ module JRuby
         end.parse!(args)
 
         @options.files = args.empty? ? nil : args
+      rescue OptionParser::InvalidOption
+        puts $!.message
+        exit -1
       end
 
       def run

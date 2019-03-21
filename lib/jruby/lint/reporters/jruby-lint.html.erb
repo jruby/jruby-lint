@@ -29,10 +29,19 @@ nav { position: relative; }
           <% @findings.each do |finding| %>
             <% if finding.error? %>
               <li class="error"><%= finding %></li>
-            <% elsif finding.warning? %>
+              <% if finding.src_line && !@options.no_src_line%>
+              <pre><%= finding.src_line %></pre>
+              <% end %>
+              <% elsif finding.warning? %>
               <li class="warning"><%= finding %></li>
+              <% if finding.src_line && !@options.no_src_line%>
+              <pre><%= finding.src_line %></pre>
+              <% end %>
             <% else %>
               <li class="message"><%= finding %></li>
+              <% if finding.src_line && !@options.no_src_line%>
+              <pre><%= finding.src_line %></pre>
+              <% end %>
             <% end %>
           <% end %>
         </ul>

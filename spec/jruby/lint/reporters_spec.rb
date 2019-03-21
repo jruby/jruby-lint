@@ -26,16 +26,25 @@ describe JRuby::Lint::Reporters do
     Given(:reporter) { JRuby::Lint::Reporters::ANSIColor.new(project, output) }
 
     context "shows a finding tagged 'error' in red" do
-      Given(:finding) { double "finding", :to_s => "hello", :tags => %w(error), :error? => true }
-      Given(:output) { double("output").tap {|o| expect(o).to receive(:puts).with(red("hello")) } }
+      Given(:finding) { double "finding", src_line: "line", to_s: "hello", tags: %w(error), "error?": true }
+      Given(:output) do
+        double("output").tap do |o|
+          expect(o).to receive(:puts).with(red("hello"))
+          expect(o).to receive(:puts).with("line")
+        end
+      end
 
       Then { reporter.report [finding] }
     end
 
     context "shows a finding tagged 'warning' in cyan" do
-      Given(:finding) { double "finding", :to_s => "hello", :tags => %w(warning), :error? => false, :warning? => true }
-      Given(:output) { double("output").tap {|o| expect(o).to receive(:puts).with(cyan("hello")) } }
-
+      Given(:finding) { double "finding", :src_line => "line", :to_s => "hello", :tags => %w(warning), :error? => false, :warning? => true }
+      Given(:output) do
+        double("output").tap do |o|
+          expect(o).to receive(:puts).with(cyan("hello"))
+          expect(o).to receive(:puts).with("line")
+        end
+      end
       Then { reporter.report [finding] }
     end
   end
@@ -44,13 +53,13 @@ describe JRuby::Lint::Reporters do
     Given(:reporter) { JRuby::Lint::Reporters::Html.new(project, 'lint-spec-report.html') }
 
     context "shows a finding tagged 'error' in red" do
-      Given(:finding) { double "finding", :to_s => "hello", :tags => %w(error), :error? => true }
+      Given(:finding) { double "finding", :src_line => "line", :to_s => "hello", :tags => %w(error), :error? => true }
       Then { reporter.print_report [finding] }
       Then { expect(File.read('lint-spec-report.html')).to include('<li class="error">hello</li>') }
     end
 
     context "shows a finding tagged 'warning' in yellow" do
-      Given(:finding) { double "finding", :to_s => "hello", :tags => %w(warning), :error? => false, :warning? => true }
+      Given(:finding) { double "finding", :src_line => "line", :to_s => "hello", :tags => %w(warning), :error? => false, :warning? => true }
       Then { reporter.print_report [finding] }
       Then { expect(File.read('lint-spec-report.html')).to include('<li class="warning">hello</li>') }
     end

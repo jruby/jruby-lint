@@ -1,11 +1,12 @@
+require 'ostruct'
+
 module JRuby::Lint
   module Reporters
     class Html
       require 'erb'
 
-      def initialize(project, output)
-        @tags = project.tags
-        @output = output
+      def initialize(project, output, options=OpenStruct.new)
+        @tags, @output, @options = project.tags, output, options
         @template = ERB.new(File.read(File.expand_path('../jruby-lint.html.erb', __FILE__)))
       end
 

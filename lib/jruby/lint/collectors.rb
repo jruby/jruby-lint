@@ -12,8 +12,10 @@ module JRuby::Lint
       @stack = [] # FIXME: ast visiting is not something checkers can see so stored here for now
     end
 
-    def add_finding(msg, tags, line=nil)
-      @findings << Finding.new(msg, tags, file, line)
+    def add_finding(message, tags, line=nil)
+      puts caller if (line == "1") 
+      src_line = line ? contents.split(/\n/)[line-1] : nil
+      @findings << Finding.new(message, tags, file, line, src_line)
     end
 
     class CheckersVisitor < AST::Visitor
@@ -57,7 +59,7 @@ module JRuby::Lint
         CheckersVisitor.new(ast, self, checkers).traverse
       rescue SyntaxError => e
         file, line, message = e.message.split(/:\s*/, 3)
-        add_finding(message, [:syntax, :error], line)
+        add_finding(message, [:syntax, :error], line.to_i)
       end
     end
 
