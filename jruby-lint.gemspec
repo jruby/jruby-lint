@@ -19,8 +19,6 @@ Gem::Specification.new do |s|
   Most pure Ruby code will run fine, but the two common areas that
   trip people up are native extensions and threading}
 
-  s.rubyforge_project = "jruby-lint"
-
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
