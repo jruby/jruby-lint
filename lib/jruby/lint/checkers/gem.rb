@@ -2,7 +2,7 @@ module JRuby::Lint::Checkers
   module CheckGemNode
     def self.add_wiki_link_finding(collector)
       unless @added_wiki_link
-        collector.add_finding("For more on gem compatibility see http://wiki.jruby.org/C-Extension-Alternatives", [:gems, :info]).tap do |f|
+        collector.add_finding("For more on gem compatibility see https://github.com/jruby/jruby/wiki/C-Extension-Alternatives", [:gems, :info]).tap do |f|
           def f.to_s
             message
           end
